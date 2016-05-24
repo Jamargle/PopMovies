@@ -1,6 +1,6 @@
-package com.josecognizant.popmovies;
+package com.josecognizant.popmovies.data.network;
 
-import com.josecognizant.popmovies.model.Movie;
+import com.josecognizant.popmovies.domain.model.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +13,7 @@ import java.util.List;
  * JSON parser for parsing movie data fetched from Moviedb API
  * Created by Jose on 24/05/2016.
  */
-public class MovieJsonParser {
+public class MovieJsonParserApiClient {
     private static final String RESULTS_PARAMETER = "results";
     private static final String POSTER_PATH_PARAMETER = "poster_path";
     private static final String ORIGINAL_TITLE_PARAMETER = "original_title";
@@ -23,7 +23,7 @@ public class MovieJsonParser {
 
     private JSONArray mMovieData;
 
-    public MovieJsonParser(String jsonData) throws JSONException {
+    public MovieJsonParserApiClient(String jsonData) throws JSONException {
         JSONObject movies = new JSONObject(jsonData);
         mMovieData = movies.getJSONArray(RESULTS_PARAMETER);
     }
@@ -34,7 +34,7 @@ public class MovieJsonParser {
      * @return List of Movies with the data from the API
      * @throws JSONException
      */
-    public List<Movie> getWeatherDataFromJson() throws JSONException {
+    public List<Movie> getMoviesDataFromJson() throws JSONException {
 
         List<Movie> moviesItems = new ArrayList<>();
         for (int i = 0; i < mMovieData.length(); i++) {

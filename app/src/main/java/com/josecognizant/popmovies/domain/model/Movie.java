@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.model;
+package com.josecognizant.popmovies.domain.model;
 
 /**
  * Class representing the Movie entity
