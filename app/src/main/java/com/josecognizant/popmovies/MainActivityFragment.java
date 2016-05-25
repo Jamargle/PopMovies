@@ -69,7 +69,7 @@ public class MainActivityFragment extends Fragment
         mMovieList.clear();
         mMovieList.addAll(newMovies);
         if (mAdapter == null) {
-            mAdapter = new MovieAdapter(this, mMovieList);
+            mAdapter = new MovieAdapter(this, mMovieList, getActivity());
         }
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
