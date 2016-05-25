@@ -44,9 +44,9 @@ public class MovieJsonParserApiClient {
         JSONObject jsonMovie = sMovieData.getJSONObject(index);
         return new Movie.Builder()
                 .originalTitle(jsonMovie.getString(ORIGINAL_TITLE_PARAMETER))
-                .overview(OVERVIEW_PARAMETER)
-                .thumbnailPosterPath(POSTER_PATH_PARAMETER)
-                .releaseDate(RELEASE_DATE_PARAMETER)
-                .voteAverage(USER_RATING_PARAMETER).build();
+                .overview(jsonMovie.getString(OVERVIEW_PARAMETER))
+                .thumbnailPosterPath(jsonMovie.getString(POSTER_PATH_PARAMETER))
+                .releaseDate(jsonMovie.getString(RELEASE_DATE_PARAMETER))
+                .voteAverage(jsonMovie.getString(USER_RATING_PARAMETER)).build();
     }
 }
