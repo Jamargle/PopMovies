@@ -38,17 +38,15 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
 
     @Override
     protected List<Movie> doInBackground(String... params) {
-        if (params.length > 1) {
-            URL url = null;
-            try {
-                url = createPopularMovieURL();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                Log.e(LOG_TAG, "Imposible to create an URL for fetching weather data", e);
-            }
-            if (url != null) {
-                return fetchMovieData(url);
-            }
+        URL url = null;
+        try {
+            url = createPopularMovieURL();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, "Imposible to create an URL for fetching weather data", e);
+        }
+        if (url != null) {
+            return fetchMovieData(url);
         }
         return null;
     }
@@ -83,7 +81,6 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         List<Movie> movies = new ArrayList<>();
         String fetchedData;
         try {
-            Log.d(LOG_TAG, "Created URL: " + url);
             openHttpConection(url);
 
             InputStream inputStream = mUrlConnection.getInputStream();
