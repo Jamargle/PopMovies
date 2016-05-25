@@ -2,6 +2,7 @@ package com.josecognizant.popmovies;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,9 +43,8 @@ public class MainActivityFragment extends Fragment
     private void initRecyclerView(View rootView) {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_movie_list);
         mRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(llm);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
     }
 
     private void refreshMovies() {
@@ -81,7 +81,7 @@ public class MainActivityFragment extends Fragment
             Movie movie = mMovieList.get(position);
             startMovieDetailsActivity(movie);
         }
-        Toast.makeText(getActivity(), "TOUCHED", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "TOUCHED " + mMovieList.get(position).getOriginalTitle(), Toast.LENGTH_SHORT).show();
     }
 
     private void startMovieDetailsActivity(Movie movie) {
