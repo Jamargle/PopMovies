@@ -16,7 +16,7 @@ public class MovieJsonParserApiClient {
     private static final String POSTER_PATH_PARAMETER = "poster_path";
     private static final String ORIGINAL_TITLE_PARAMETER = "original_title";
     private static final String OVERVIEW_PARAMETER = "overview";
-    private static final String USER_RATING_PARAMETER = "vote_count";
+    private static final String USER_RATING_PARAMETER = "vote_average";
     private static final String RELEASE_DATE_PARAMETER = "release_date";
 
     private static JSONArray sMovieData;
