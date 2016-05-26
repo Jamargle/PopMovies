@@ -1,7 +1,9 @@
 package com.josecognizant.popmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,17 +77,15 @@ public class MainActivityFragment extends Fragment
 
     private void refreshMovies() {
         FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(this);
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//        String city_code = prefs.getString(getString(R.string.pref_city_id_key),
-//                getString(R.string.pref_default_city_id));
-//        String unitType = prefs.getString(getString(R.string.pref_unit_list_key),
-//                getString(R.string.pref_units_metric));
-//        if (unitType.equals(getString(R.string.pref_units_imperial))) {
-//            fetchWeatherTask.execute(ForecastUtilities.IMPERIAL_UNITS, city_code);
-//        } else if (unitType.equals(getString(R.string.pref_units_metric))) {
-//            fetchWeatherTask.execute(ForecastUtilities.METRIC_UNITS, city_code);
-//        }
-        fetchMoviesTask.execute();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String wayToSort =
+                prefs.getString(getString(R.string.pref_sorting_model_key),
+                        getString(R.string.pref_sort_by_popular));
+        if (wayToSort.equals(getString(R.string.pref_sort_by_popular))) {
+            fetchMoviesTask.execute(FetchMoviesTask.POPULAR_MOVIES_PARAMETER);
+        } else if (wayToSort.equals(getString(R.string.pref_sort_by_rating))) {
+            fetchMoviesTask.execute(FetchMoviesTask.TOPRATED_MOVIES_PARAMETER);
+        }
     }
 
     public void updateAdapterData(List<Movie> newMovies) {
