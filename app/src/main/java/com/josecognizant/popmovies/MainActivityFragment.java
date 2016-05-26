@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +110,7 @@ public class MainActivityFragment extends Fragment
 
     private void startMovieDetailsActivity(Movie movie) {
         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+        intent.putExtra(MovieDetailsFragment.MOVIE_TO_SHOW, movie);
         startActivity(intent);
     }
 }
