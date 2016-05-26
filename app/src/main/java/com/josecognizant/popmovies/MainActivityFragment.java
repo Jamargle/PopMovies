@@ -107,10 +107,10 @@ public class MainActivityFragment extends Fragment
             Movie movie = mMovieList.get(position);
             startMovieDetailsActivity(movie);
         }
-        Toast.makeText(getActivity(), "TOUCHED " + mMovieList.get(position).getOriginalTitle(), Toast.LENGTH_SHORT).show();
     }
 
     private void startMovieDetailsActivity(Movie movie) {
-        //TODO: to implement
+        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+        startActivity(intent);
     }
 }
