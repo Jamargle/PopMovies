@@ -18,6 +18,9 @@ public class MovieJsonParserApiClient {
     private static final String OVERVIEW_PARAMETER = "overview";
     private static final String USER_RATING_PARAMETER = "vote_average";
     private static final String RELEASE_DATE_PARAMETER = "release_date";
+    private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
+    private static final String IMAGE_MEDIUM_SIZE = "/w185";
+    private static final String IMAGE_BIG_SIZE = "/w342";
 
     private static JSONArray sMovieData;
 
@@ -45,7 +48,7 @@ public class MovieJsonParserApiClient {
         return new Movie.Builder()
                 .originalTitle(jsonMovie.getString(ORIGINAL_TITLE_PARAMETER))
                 .overview(jsonMovie.getString(OVERVIEW_PARAMETER))
-                .thumbnailPosterPath(jsonMovie.getString(POSTER_PATH_PARAMETER))
+                .thumbnailPosterPath(BASE_IMAGE_URL + IMAGE_MEDIUM_SIZE + jsonMovie.getString(POSTER_PATH_PARAMETER))
                 .releaseDate(jsonMovie.getString(RELEASE_DATE_PARAMETER))
                 .voteAverage(jsonMovie.getString(USER_RATING_PARAMETER)).build();
     }

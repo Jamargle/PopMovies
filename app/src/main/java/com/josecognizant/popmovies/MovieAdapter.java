@@ -2,6 +2,7 @@ package com.josecognizant.popmovies;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,6 @@ import java.util.List;
  * Created by 552702 on 24/05/2016.
  */
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
-    private static final String BASE_URL = "http://image.tmdb.org/t/p/";
-    private static final String MEDIUM_SIZE = "/w185";
-    private static final String BIG_SIZE = "/w342";
-
     private Context mContext;
     private OnItemClickListener mClickListener;
     private List<Movie> mList;
@@ -40,9 +37,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-        String posterPath = mList.get(position).getThumbnailPosterPath();
+        Log.d("abcd", "Path " + mList.get(position).getThumbnailPosterPath());
         Glide.with(mContext)
-                .load(BASE_URL + MEDIUM_SIZE + posterPath)
+                .load(mList.get(position).getThumbnailPosterPath())
                 .into(holder.mMoviePoster);
     }
 
