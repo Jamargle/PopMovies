@@ -1,10 +1,13 @@
 package com.josecognizant.popmovies;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Class representing the Movie entity
  * Created by Jose on 24/05/2016.
  */
-public class Movie {
+public class Movie implements Parcelable {
     private String originalTitle;
     private String overview;
     private String thumbnailPosterPath;
@@ -17,6 +20,26 @@ public class Movie {
         this.thumbnailPosterPath = builder.thumbnailPosterPath;
         this.voteAverage = builder.voteAverage;
         this.releaseDate = builder.releaseDate;
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    protected Movie(Parcel in) {
+        originalTitle = in.readString();
+        overview = in.readString();
+        thumbnailPosterPath = in.readString();
+        voteAverage = in.readString();
+        releaseDate = in.readString();
     }
 
     public String getOriginalTitle() {
@@ -37,6 +60,20 @@ public class Movie {
 
     public String getReleaseDate() {
         return releaseDate;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(originalTitle);
+        dest.writeString(overview);
+        dest.writeString(thumbnailPosterPath);
+        dest.writeString(voteAverage);
+        dest.writeString(releaseDate);
     }
 
     public static class Builder {
