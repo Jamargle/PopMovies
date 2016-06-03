@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.josecognizant.popmovies.model.Movie;
+import com.josecognizant.popmovies.util.MovieJsonParserApiClient;
 
 import org.json.JSONException;
 

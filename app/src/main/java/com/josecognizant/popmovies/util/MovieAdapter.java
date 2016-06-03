@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies;
+package com.josecognizant.popmovies.util;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.josecognizant.popmovies.R;
 import com.josecognizant.popmovies.model.Movie;
 
 import java.util.List;

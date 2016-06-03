@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies;
+package com.josecognizant.popmovies.util;
 
 import com.josecognizant.popmovies.model.Movie;
 
