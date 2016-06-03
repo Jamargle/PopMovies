@@ -42,7 +42,7 @@ public class MovieContract {
         public static final String COLUMN_DURATION = "duration";
         public static final String COLUMN_OVERVIEW = "synopsis";
         public static final String COLUMN_VOTE_AVERAGE = "vote_average";
-        public static final String COLUMN_RELEASE_DARTE = "release_date";
+        public static final String COLUMN_RELEASE_DATE = "release_date";
         public static final String COLUMN_ORDER_TYPE = "way_to_sort";
         public static final String COLUMN_FAVORITE = "favorite";
 
