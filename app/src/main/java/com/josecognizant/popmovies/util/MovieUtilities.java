@@ -24,4 +24,14 @@ public class MovieUtilities {
         return prefs.getString(context.getString(R.string.pref_sorting_model_key),
                 context.getString(R.string.pref_sort_by_popular));
     }
+
+    /**
+     * Check if the stored value of favourite column is true or false
+     *
+     * @param value Value of COLUMN_FAVORITE for a movie
+     * @return True if the movie is stored as favorite or false otherwise
+     */
+    public static boolean isFavourite(int value) {
+        return value == 1;
+    }
 }
