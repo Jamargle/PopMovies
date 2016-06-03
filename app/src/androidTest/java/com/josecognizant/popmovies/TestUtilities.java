@@ -23,16 +23,16 @@ import java.util.Set;
  * Created by Jose on 03/06/2016.
  */
 public class TestUtilities extends AndroidTestCase {
-    private static final String TEST_MOVIE_TITLE = "This is the title of the movie";
-    private static final String TEST_MOVIE_POSTER = "/1213fasdfa";
-    private static final int TEST_MOVIE_DURATION = 123;
-    private static final String TEST_MOVIE_OVERVIEW = "This is the overview of the movie";
-    private static final float TEST_MOVIE_VOTE_AVERAGE = 4.5f;
-    private static final String TEST_MOVIE_RELEASE = "05/10/1988";
-    private static final String TEST_MOVIE_ORDER_TYPE = "popular";
-    private static final int TEST_MOVIE_FAVORITE = 0;
+    public static final String TEST_MOVIE_TITLE = "This is the title of the movie";
+    public static final String TEST_MOVIE_POSTER = "/1213fasdfa";
+    public static final int TEST_MOVIE_DURATION = 123;
+    public static final String TEST_MOVIE_OVERVIEW = "This is the overview of the movie";
+    public static final float TEST_MOVIE_VOTE_AVERAGE = 4.5f;
+    public static final String TEST_MOVIE_RELEASE = "05/10/1988";
+    public static final String TEST_MOVIE_ORDER_TYPE = "popular";
+    public static final int TEST_MOVIE_FAVORITE = 0;
 
-    static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
+    public static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
         validateCurrentRecord(error, valueCursor, expectedValues);
         valueCursor.close();
@@ -70,7 +70,7 @@ public class TestUtilities extends AndroidTestCase {
         return movieValues;
     }
 
-    static long insertMovieValues(Context context) {
+    public static long insertMovieValues(Context context) {
         // insert our test records into the database
         MovieDbHelper dbHelper = new MovieDbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -85,11 +85,11 @@ public class TestUtilities extends AndroidTestCase {
         return movieRowId;
     }
 
-    static TestContentObserver getTestContentObserver() {
+    public static TestContentObserver getTestContentObserver() {
         return TestContentObserver.getTestContentObserver();
     }
 
-    static class TestContentObserver extends ContentObserver {
+    public static class TestContentObserver extends ContentObserver {
         final HandlerThread mHT;
         boolean mContentChanged;
 
