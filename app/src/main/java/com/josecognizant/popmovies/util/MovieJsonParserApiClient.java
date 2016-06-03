@@ -47,11 +47,28 @@ public class MovieJsonParserApiClient {
 
     private static Movie extractMovie(int index) throws JSONException {
         JSONObject jsonMovie = sMovieData.getJSONObject(index);
+        String title = "", overview = "", posterPath = "", releaseDate = "";
+        float voteAverage = 0.0f;
+        if (jsonMovie.has(ORIGINAL_TITLE_PARAMETER)) {
+            title = jsonMovie.getString(ORIGINAL_TITLE_PARAMETER);
+        }
+        if (jsonMovie.has(OVERVIEW_PARAMETER)) {
+            overview = jsonMovie.getString(OVERVIEW_PARAMETER);
+        }
+        if (jsonMovie.has(POSTER_PATH_PARAMETER)) {
+            posterPath = jsonMovie.getString(POSTER_PATH_PARAMETER);
+        }
+        if (jsonMovie.has(RELEASE_DATE_PARAMETER)) {
+            releaseDate = jsonMovie.getString(RELEASE_DATE_PARAMETER);
+        }
+        if (jsonMovie.has(USER_RATING_PARAMETER)) {
+            voteAverage = Float.parseFloat(jsonMovie.getString(USER_RATING_PARAMETER));
+        }
         return new Movie.Builder()
-                .originalTitle(jsonMovie.getString(ORIGINAL_TITLE_PARAMETER))
-                .overview(jsonMovie.getString(OVERVIEW_PARAMETER))
-                .thumbnailPosterPath(BASE_IMAGE_URL + IMAGE_MEDIUM_SIZE + jsonMovie.getString(POSTER_PATH_PARAMETER))
-                .releaseDate(jsonMovie.getString(RELEASE_DATE_PARAMETER))
-                .voteAverage(Float.parseFloat(jsonMovie.getString(USER_RATING_PARAMETER))).build();
+                .originalTitle(title)
+                .overview(overview)
+                .thumbnailPosterPath(BASE_IMAGE_URL + IMAGE_MEDIUM_SIZE + posterPath)
+                .releaseDate(releaseDate)
+                .voteAverage(voteAverage).build();
     }
 }

@@ -75,7 +75,7 @@ public class MovieDetailsFragment extends Fragment {
 
     private void setVoteAverage(TextView voteAverageTextView) {
         if (voteAverageTextView != null) {
-            voteAverageTextView.setText(mMovie.getVoteAverage());
+            voteAverageTextView.setText(String.valueOf(mMovie.getVoteAverage()));
         }
     }
 
