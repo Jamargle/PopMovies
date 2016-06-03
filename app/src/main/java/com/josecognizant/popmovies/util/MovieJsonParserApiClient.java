@@ -52,6 +52,6 @@ public class MovieJsonParserApiClient {
                 .overview(jsonMovie.getString(OVERVIEW_PARAMETER))
                 .thumbnailPosterPath(BASE_IMAGE_URL + IMAGE_MEDIUM_SIZE + jsonMovie.getString(POSTER_PATH_PARAMETER))
                 .releaseDate(jsonMovie.getString(RELEASE_DATE_PARAMETER))
-                .voteAverage(jsonMovie.getString(USER_RATING_PARAMETER)).build();
+                .voteAverage(Float.parseFloat(jsonMovie.getString(USER_RATING_PARAMETER))).build();
     }
 }

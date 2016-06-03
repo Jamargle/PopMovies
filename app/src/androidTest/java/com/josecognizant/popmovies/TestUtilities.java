@@ -25,7 +25,6 @@ import java.util.Set;
 public class TestUtilities extends AndroidTestCase {
     public static final String TEST_MOVIE_TITLE = "This is the title of the movie";
     public static final String TEST_MOVIE_POSTER = "/1213fasdfa";
-    public static final int TEST_MOVIE_DURATION = 123;
     public static final String TEST_MOVIE_OVERVIEW = "This is the overview of the movie";
     public static final float TEST_MOVIE_VOTE_AVERAGE = 4.5f;
     public static final String TEST_MOVIE_RELEASE = "05/10/1988";
@@ -60,7 +59,6 @@ public class TestUtilities extends AndroidTestCase {
         ContentValues movieValues = new ContentValues();
         movieValues.put(MovieContract.MovieEntry.COLUMN_TITLE, TEST_MOVIE_TITLE);
         movieValues.put(MovieContract.MovieEntry.COLUMN_POSTER, TEST_MOVIE_POSTER);
-        movieValues.put(MovieContract.MovieEntry.COLUMN_DURATION, TEST_MOVIE_DURATION);
         movieValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, TEST_MOVIE_OVERVIEW);
         movieValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, TEST_MOVIE_VOTE_AVERAGE);
         movieValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, TEST_MOVIE_RELEASE);

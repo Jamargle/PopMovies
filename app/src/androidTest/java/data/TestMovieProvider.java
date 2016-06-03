@@ -33,7 +33,6 @@ public class TestMovieProvider extends AndroidTestCase {
             ContentValues movieValues = new ContentValues();
             movieValues.put(MovieEntry.COLUMN_TITLE, TestUtilities.TEST_MOVIE_TITLE + " " + (i + 1));
             movieValues.put(MovieEntry.COLUMN_POSTER, TestUtilities.TEST_MOVIE_POSTER);
-            movieValues.put(MovieEntry.COLUMN_DURATION, TestUtilities.TEST_MOVIE_DURATION);
             movieValues.put(MovieEntry.COLUMN_OVERVIEW, TestUtilities.TEST_MOVIE_OVERVIEW);
             movieValues.put(MovieEntry.COLUMN_VOTE_AVERAGE, TestUtilities.TEST_MOVIE_VOTE_AVERAGE);
             movieValues.put(MovieEntry.COLUMN_RELEASE_DATE, TestUtilities.TEST_MOVIE_RELEASE);

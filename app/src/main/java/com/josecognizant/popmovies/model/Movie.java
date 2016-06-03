@@ -11,8 +11,10 @@ public class Movie implements Parcelable {
     private String originalTitle;
     private String overview;
     private String thumbnailPosterPath;
-    private String voteAverage;
+    private float voteAverage;
     private String releaseDate;
+    private String orderType;
+    private int favorite;
 
     Movie(Builder builder) {
         this.originalTitle = builder.originalTitle;
@@ -20,6 +22,8 @@ public class Movie implements Parcelable {
         this.thumbnailPosterPath = builder.thumbnailPosterPath;
         this.voteAverage = builder.voteAverage;
         this.releaseDate = builder.releaseDate;
+        this.orderType = builder.orderType;
+        this.favorite = builder.favorite;
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -38,8 +42,10 @@ public class Movie implements Parcelable {
         originalTitle = in.readString();
         overview = in.readString();
         thumbnailPosterPath = in.readString();
-        voteAverage = in.readString();
+        voteAverage = in.readFloat();
         releaseDate = in.readString();
+        orderType = in.readString();
+        favorite = in.readInt();
     }
 
     public String getOriginalTitle() {
@@ -54,12 +60,20 @@ public class Movie implements Parcelable {
         return thumbnailPosterPath;
     }
 
-    public String getVoteAverage() {
+    public float getVoteAverage() {
         return voteAverage;
     }
 
     public String getReleaseDate() {
         return releaseDate;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public int getFavorite() {
+        return favorite;
     }
 
     @Override
@@ -72,16 +86,20 @@ public class Movie implements Parcelable {
         dest.writeString(originalTitle);
         dest.writeString(overview);
         dest.writeString(thumbnailPosterPath);
-        dest.writeString(voteAverage);
+        dest.writeFloat(voteAverage);
         dest.writeString(releaseDate);
+        dest.writeString(orderType);
+        dest.writeInt(favorite);
     }
 
     public static class Builder {
         private String originalTitle;
         private String overview;
         private String thumbnailPosterPath;
-        private String voteAverage;
+        private float voteAverage;
         private String releaseDate;
+        private String orderType;
+        private int favorite;
 
         public Builder originalTitle(String originalTitle) {
             this.originalTitle = originalTitle;
@@ -98,13 +116,27 @@ public class Movie implements Parcelable {
             return this;
         }
 
-        public Builder voteAverage(String voteAverage) {
+        public Builder voteAverage(float voteAverage) {
             this.voteAverage = voteAverage;
             return this;
         }
 
         public Builder releaseDate(String releaseDate) {
             this.releaseDate = releaseDate;
+            return this;
+        }
+
+        public Builder orderType(String orderType) {
+            this.orderType = orderType;
+            return this;
+        }
+
+        public Builder favorite(int favorite) {
+            if (favorite == 0 || favorite == 1) {
+                this.favorite = favorite;
+            } else {
+                this.favorite = 0;
+            }
             return this;
         }
 
