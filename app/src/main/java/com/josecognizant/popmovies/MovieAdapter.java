@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.josecognizant.popmovies.model.Movie;
 
 import java.util.List;
 

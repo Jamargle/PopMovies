@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.josecognizant.popmovies.model.Movie;
+
 import org.json.JSONException;
 
 import java.io.BufferedReader;

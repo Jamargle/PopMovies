@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.josecognizant.popmovies.model.Movie;
 
 /**
  * Fragment for showing details of movies

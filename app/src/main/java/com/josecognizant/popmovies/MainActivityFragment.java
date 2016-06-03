@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.josecognizant.popmovies.model.Movie;
+
 import java.util.ArrayList;
 import java.util.List;
 

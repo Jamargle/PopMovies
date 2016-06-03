@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies;
+package com.josecognizant.popmovies.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
