@@ -10,7 +10,7 @@ import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
  * Tests for MovieContract class
  * Created by Jose on 03/06/2016.
  */
-public class TestWeatherContract extends AndroidTestCase {
+public class TestMovieContract extends AndroidTestCase {
 
     public void testBuildPopularMoviesUri() {
         Uri popularMoviesUri = MovieEntry.buildPopularMoviesUri();
