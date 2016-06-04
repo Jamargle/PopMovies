@@ -35,7 +35,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.josecognizant.popmovies.MainActivity" />
         </activity>
-
+        <service android:name=".service.MoviesIntentService" />
         <provider
             android:name=".data.MovieProvider"
             android:authorities="com.josecognizant.popmovies.app"

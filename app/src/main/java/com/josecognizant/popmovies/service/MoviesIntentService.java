@@ -32,7 +32,7 @@ import java.util.List;
 public class MoviesIntentService extends IntentService {
     public static final String MOVIE_SELECTED_ORDER = "movie_selected_order";
     public static final String POPULAR_MOVIES_PARAMETER = "popular";
-    public static final String TOPRATED_MOVIES_PARAMETER = "top_rated";
+    public static final String TOP_RATED_MOVIES_PARAMETER = "top_rated";
     private static final String BASE_URL = "https://api.themoviedb.org/3/movie";
     private static final String API_KEY_PARAMETER = "api_key";
     private static final String LOG_TAG = MoviesIntentService.class.getSimpleName();
@@ -40,11 +40,18 @@ public class MoviesIntentService extends IntentService {
     private HttpURLConnection mUrlConnection = null;
     private BufferedReader mReader = null;
 
+
+    @SuppressWarnings("unused")
+    public MoviesIntentService() {
+        super("PopularMovies");
+    }
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
      * @param name Used to name the worker thread, important only for debugging.
      */
+    @SuppressWarnings("unused")
     public MoviesIntentService(String name) {
         super(name);
     }
@@ -57,12 +64,12 @@ public class MoviesIntentService extends IntentService {
             try {
                 if (movieOrder.equals(POPULAR_MOVIES_PARAMETER)) {
                     url = createPopularMovieURL();
-                } else if (movieOrder.equals(TOPRATED_MOVIES_PARAMETER)) {
+                } else if (movieOrder.equals(TOP_RATED_MOVIES_PARAMETER)) {
                     url = createTopRatedMovieURL();
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-                Log.e(LOG_TAG, "Imposible to create an URL for fetching weather data", e);
+                Log.e(LOG_TAG, "Impossible to create an URL for fetching weather data", e);
             }
             if (url != null) {
                 final List<ContentValues> movies = fetchMovieData(url);
@@ -82,7 +89,7 @@ public class MoviesIntentService extends IntentService {
 
     private URL createTopRatedMovieURL() throws MalformedURLException {
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                .appendPath(TOPRATED_MOVIES_PARAMETER)
+                .appendPath(TOP_RATED_MOVIES_PARAMETER)
                 .appendQueryParameter(API_KEY_PARAMETER, BuildConfig.MOVIES_API_KEY)
                 .build();
         return new URL(builtUri.toString());
@@ -93,7 +100,7 @@ public class MoviesIntentService extends IntentService {
         List<ContentValues> movies = new ArrayList<>();
         String fetchedData;
         try {
-            openHttpConection(url);
+            openHttpConnection(url);
 
             InputStream inputStream = mUrlConnection.getInputStream();
             fetchedData = readDataFromStream(inputStream);
@@ -106,7 +113,7 @@ public class MoviesIntentService extends IntentService {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error during fetching weather data", e);
         } finally {
-            closeHttpConection();
+            closeHttpConnection();
             closeReader();
         }
 
@@ -134,13 +141,13 @@ public class MoviesIntentService extends IntentService {
         }
     }
 
-    private void openHttpConection(URL url) throws IOException {
+    private void openHttpConnection(URL url) throws IOException {
         mUrlConnection = (HttpURLConnection) url.openConnection();
         mUrlConnection.setRequestMethod("GET");
         mUrlConnection.connect();
     }
 
-    private void closeHttpConection() {
+    private void closeHttpConnection() {
         if (mUrlConnection != null) {
             mUrlConnection.disconnect();
         }
