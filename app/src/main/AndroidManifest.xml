@@ -37,7 +37,7 @@
                 android:value="com.josecognizant.popmovies.MainActivity" />
         </activity>
 
-        <service android:name=".service.MoviesIntentService" />
+        <service android:name=".service.MoviesDownloadService" />
         <provider
             android:name=".data.MovieProvider"
             android:authorities="com.josecognizant.popmovies.app"
