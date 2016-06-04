@@ -29,13 +29,13 @@ import java.util.List;
  * Intent Service to perform downloads in a background service
  * Created by 552702 on 03/06/2016.
  */
-public class MoviesIntentService extends IntentService {
+public class MoviesDownloadService extends IntentService {
     public static final String MOVIE_SELECTED_ORDER = "movie_selected_order";
     public static final String POPULAR_MOVIES_PARAMETER = "popular";
     public static final String TOP_RATED_MOVIES_PARAMETER = "top_rated";
     private static final String BASE_URL = "https://api.themoviedb.org/3/movie";
     private static final String API_KEY_PARAMETER = "api_key";
-    private static final String LOG_TAG = MoviesIntentService.class.getSimpleName();
+    private static final String LOG_TAG = MoviesDownloadService.class.getSimpleName();
 
     private HttpURLConnection mUrlConnection = null;
     private BufferedReader mReader = null;
@@ -43,7 +43,7 @@ public class MoviesIntentService extends IntentService {
 
 
     @SuppressWarnings("unused")
-    public MoviesIntentService() {
+    public MoviesDownloadService() {
         super("PopularMovies");
     }
 
@@ -53,7 +53,7 @@ public class MoviesIntentService extends IntentService {
      * @param name Used to name the worker thread, important only for debugging.
      */
     @SuppressWarnings("unused")
-    public MoviesIntentService(String name) {
+    public MoviesDownloadService(String name) {
         super(name);
     }
 
