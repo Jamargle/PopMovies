@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.josecognizant.popmovies.model.Movie;
+import com.josecognizant.popmovies.service.MoviesIntentService;
 import com.josecognizant.popmovies.util.MovieAdapter;
 
 import java.util.ArrayList;
@@ -78,15 +79,26 @@ public class MainActivityFragment extends Fragment
     }
 
     private void refreshMovies() {
-        FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(this);
+        startRefreshMoviesFromInternetService();
+    }
+
+    private void startRefreshMoviesFromInternetService() {
+        Intent intent = new Intent(getActivity(), MoviesIntentService.class);
+        intent.putExtra(MoviesIntentService.MOVIE_SELECTED_ORDER, getMoviesToShow());
+        getActivity().startService(intent);
+    }
+
+    private String getMoviesToShow() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String wayToSort =
-                prefs.getString(getString(R.string.pref_sorting_model_key),
-                        getString(R.string.pref_sort_by_popular));
-        if (wayToSort.equals(getString(R.string.pref_sort_by_popular))) {
-            fetchMoviesTask.execute(FetchMoviesTask.POPULAR_MOVIES_PARAMETER);
-        } else if (wayToSort.equals(getString(R.string.pref_sort_by_rating))) {
-            fetchMoviesTask.execute(FetchMoviesTask.TOPRATED_MOVIES_PARAMETER);
+        String wayToOrder = prefs.getString(
+                getString(R.string.pref_sorting_model_key),
+                getString(R.string.pref_sort_by_popular));
+        if (wayToOrder.equals(getString(R.string.pref_sort_by_popular))) {
+            return MoviesIntentService.POPULAR_MOVIES_PARAMETER;
+        } else if (wayToOrder.equals(getString(R.string.pref_sort_by_rating))) {
+            return MoviesIntentService.TOP_RATED_MOVIES_PARAMETER;
+        } else {
+            return "";
         }
     }
 
