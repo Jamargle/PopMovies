@@ -8,6 +8,17 @@ import android.os.Parcelable;
  * Created by Jose on 24/05/2016.
  */
 public class Movie implements Parcelable {
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
     private String originalTitle;
     private String overview;
     private String thumbnailPosterPath;
@@ -25,18 +36,6 @@ public class Movie implements Parcelable {
         this.orderType = builder.orderType;
         this.favorite = builder.favorite;
     }
-
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
 
     protected Movie(Parcel in) {
         originalTitle = in.readString();
@@ -72,8 +71,20 @@ public class Movie implements Parcelable {
         return orderType;
     }
 
+    public void setOrderType(String orderType) {
+        if (!orderType.isEmpty()) {
+            this.orderType = orderType;
+        }
+    }
+
     public int getFavorite() {
         return favorite;
+    }
+
+    public void setFavorite(int favorite) {
+        if (favorite == 0 || favorite == 1) {
+            this.favorite = favorite;
+        }
     }
 
     @Override

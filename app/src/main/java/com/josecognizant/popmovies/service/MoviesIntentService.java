@@ -39,6 +39,7 @@ public class MoviesIntentService extends IntentService {
 
     private HttpURLConnection mUrlConnection = null;
     private BufferedReader mReader = null;
+    private String mWayToOrderMovies;
 
 
     @SuppressWarnings("unused")
@@ -59,12 +60,12 @@ public class MoviesIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null && intent.hasExtra(MOVIE_SELECTED_ORDER)) {
-            String movieOrder = intent.getStringExtra(MOVIE_SELECTED_ORDER);
+            mWayToOrderMovies = intent.getStringExtra(MOVIE_SELECTED_ORDER);
             URL url = null;
             try {
-                if (movieOrder.equals(POPULAR_MOVIES_PARAMETER)) {
+                if (mWayToOrderMovies.equals(POPULAR_MOVIES_PARAMETER)) {
                     url = createPopularMovieURL();
-                } else if (movieOrder.equals(TOP_RATED_MOVIES_PARAMETER)) {
+                } else if (mWayToOrderMovies.equals(TOP_RATED_MOVIES_PARAMETER)) {
                     url = createTopRatedMovieURL();
                 }
             } catch (MalformedURLException e) {
@@ -164,7 +165,8 @@ public class MoviesIntentService extends IntentService {
     }
 
     private List<ContentValues> parseFetchedData(String fetchedData) throws JSONException {
-        final List<Movie> moviesDataFromJson = MovieJsonParserApiClient.getMoviesDataFromJson(fetchedData);
+        final List<Movie> moviesDataFromJson = MovieJsonParserApiClient
+                .getMoviesDataFromJson(fetchedData, mWayToOrderMovies);
         return MovieMapper.mapToCV(moviesDataFromJson);
     }
 

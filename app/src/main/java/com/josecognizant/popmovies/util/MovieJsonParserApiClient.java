@@ -22,23 +22,26 @@ public class MovieJsonParserApiClient {
     private static final String RELEASE_DATE_PARAMETER = "release_date";
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_MEDIUM_SIZE = "/w185";
-    private static final String IMAGE_BIG_SIZE = "/w342";
 
     private static JSONArray sMovieData;
 
     /**
      * Take a movie string in JSON Format and extract the data in a List of Movies
      *
+     * @param wayToOrder String with the way to order to add it in ContentValues in order to
+     *                   separate movies when we will do queries in the database
      * @return List of Movies with the data from the API
      * @throws JSONException
      */
-    public static List<Movie> getMoviesDataFromJson(String jsonData) throws JSONException {
+    public static List<Movie> getMoviesDataFromJson(String jsonData, String wayToOrder)
+            throws JSONException {
         JSONObject movies = new JSONObject(jsonData);
         sMovieData = movies.getJSONArray(RESULTS_PARAMETER);
 
         List<Movie> moviesItems = new ArrayList<>();
         for (int i = 0; i < sMovieData.length(); i++) {
             Movie movie = extractMovie(i);
+            movie.setOrderType(wayToOrder);
             moviesItems.add(movie);
         }
 
