@@ -9,7 +9,9 @@
     <string name="pref_title_pick_sorter_way">Pick a way to sort</string>
     <string name="pref_label_sort_by_popular">Most popular</string>
     <string name="pref_label_sort_by_rating">Top rated</string>
-    <string name="pref_sort_by_popular">popular_movies</string>
-    <string name="pref_sort_by_rating">top_rated_movies</string>
+    <string name="pref_label_favorite_movies">Favorites</string>
+    <string name="pref_sort_by_popular" translatable="false">popular_movies</string>
+    <string name="pref_sort_by_rating" translatable="false">top_rated_movies</string>
+    <string name="pref_show_favorite_movies" translatable="false">favorite_movies</string>
 
 </resources>

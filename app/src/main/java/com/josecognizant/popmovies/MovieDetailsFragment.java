@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.josecognizant.popmovies.model.Movie;
 
 /**
  * Fragment for showing details of movies
@@ -68,13 +69,13 @@ public class MovieDetailsFragment extends Fragment {
 
     private void setReleaseYear(TextView releaseYearTextView) {
         if (releaseYearTextView != null) {
-            releaseYearTextView.setText(mMovie.getReleaseDate().substring(0,4));
+            releaseYearTextView.setText(mMovie.getReleaseDate().substring(0, 4));
         }
     }
 
     private void setVoteAverage(TextView voteAverageTextView) {
         if (voteAverageTextView != null) {
-            voteAverageTextView.setText(mMovie.getVoteAverage());
+            voteAverageTextView.setText(String.valueOf(mMovie.getVoteAverage()));
         }
     }
 
