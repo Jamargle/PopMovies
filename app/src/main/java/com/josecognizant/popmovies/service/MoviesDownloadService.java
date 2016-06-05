@@ -1,14 +1,15 @@
 package com.josecognizant.popmovies.service;
 
 import android.app.IntentService;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
 import com.josecognizant.popmovies.BuildConfig;
 import com.josecognizant.popmovies.data.MovieContract;
+import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
 import com.josecognizant.popmovies.model.Movie;
 import com.josecognizant.popmovies.util.MovieJsonParserApiClient;
 import com.josecognizant.popmovies.util.MovieMapper;
@@ -31,8 +32,8 @@ import java.util.List;
  */
 public class MoviesDownloadService extends IntentService {
     public static final String MOVIE_SELECTED_ORDER = "movie_selected_order";
-    public static final String POPULAR_MOVIES_PARAMETER = "popular";
-    public static final String TOP_RATED_MOVIES_PARAMETER = "top_rated";
+    private static final String POPULAR_MOVIES_PARAMETER = "popular";
+    private static final String TOP_RATED_MOVIES_PARAMETER = "top_rated";
     private static final String BASE_URL = "https://api.themoviedb.org/3/movie";
     private static final String API_KEY_PARAMETER = "api_key";
     private static final String LOG_TAG = MoviesDownloadService.class.getSimpleName();
@@ -63,9 +64,9 @@ public class MoviesDownloadService extends IntentService {
             mWayToOrderMovies = intent.getStringExtra(MOVIE_SELECTED_ORDER);
             URL url = null;
             try {
-                if (mWayToOrderMovies.equals(POPULAR_MOVIES_PARAMETER)) {
+                if (mWayToOrderMovies.equals(MovieContract.ORDER_BY_POPULAR)) {
                     url = createPopularMovieURL();
-                } else if (mWayToOrderMovies.equals(TOP_RATED_MOVIES_PARAMETER)) {
+                } else if (mWayToOrderMovies.equals(MovieContract.ORDER_BY_TOPRATED)) {
                     url = createTopRatedMovieURL();
                 }
             } catch (MalformedURLException e) {
@@ -123,23 +124,42 @@ public class MoviesDownloadService extends IntentService {
 
     private void storeMovies(List<ContentValues> movies) {
         if (movies != null && movies.size() > 0) {
-            long movieRowId;
-            Uri movieURi;
             for (ContentValues movie : movies) {
-                movieURi = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, movie);
-                movieRowId = ContentUris.parseId(movieURi);
-                if (movieRowId == -1) {
+                if (isAlreadyInDB(movie)) {
                     // Remove the favorite field to keep the existing value
-                    movie.remove(MovieContract.MovieEntry.COLUMN_FAVORITE);
-                    movie.remove(MovieContract.MovieEntry.COLUMN_ORDER_TYPE);
+                    movie.remove(MovieEntry.COLUMN_FAVORITE);
+                    movie.remove(MovieEntry.COLUMN_ORDER_TYPE);
                     getContentResolver().update(
-                            MovieContract.MovieEntry.CONTENT_URI,
+                            MovieEntry.CONTENT_URI,
                             movie,
-                            MovieContract.MovieEntry._ID + "= ?",
-                            new String[]{Long.toString(movieRowId)});
+                            MovieEntry.COLUMN_TITLE + "= ?",
+                            new String[]{movie.getAsString(MovieEntry.COLUMN_TITLE)});
+                } else {
+                    getContentResolver().insert(MovieEntry.CONTENT_URI, movie);
                 }
             }
         }
+    }
+
+    private boolean isAlreadyInDB(ContentValues movie) {
+        String[] projection = new String[]{
+                MovieEntry._ID, MovieEntry.COLUMN_TITLE,
+                MovieEntry.COLUMN_ORDER_TYPE};
+        String selection = MovieEntry.COLUMN_TITLE + " = ? AND " +
+                MovieEntry.COLUMN_ORDER_TYPE + " = ?";
+        String[] selectionArgs = new String[]{
+                movie.getAsString(MovieEntry.COLUMN_TITLE),
+                movie.getAsString(MovieEntry.COLUMN_ORDER_TYPE)};
+
+        final Cursor cursor = getContentResolver().query(MovieEntry.CONTENT_URI,
+                projection, selection, selectionArgs, null);
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                return true;
+            }
+            cursor.close();
+        }
+        return false;
     }
 
     private void openHttpConnection(URL url) throws IOException {
