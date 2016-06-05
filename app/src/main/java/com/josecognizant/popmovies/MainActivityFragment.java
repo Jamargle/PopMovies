@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.josecognizant.popmovies.data.MovieContract;
 import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
 import com.josecognizant.popmovies.service.MoviesDownloadService;
 import com.josecognizant.popmovies.util.MovieAdapter;
@@ -85,6 +86,8 @@ public class MainActivityFragment extends Fragment
         mRecyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         mRecyclerView.setLayoutManager(gridLayoutManager);
+
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void initAdapter() {
@@ -107,9 +110,9 @@ public class MainActivityFragment extends Fragment
                 getString(R.string.pref_sorting_model_key),
                 getString(R.string.pref_sort_by_popular));
         if (wayToOrder.equals(getString(R.string.pref_sort_by_popular))) {
-            return MoviesDownloadService.POPULAR_MOVIES_PARAMETER;
+            return MovieContract.ORDER_BY_POPULAR;
         } else if (wayToOrder.equals(getString(R.string.pref_sort_by_rating))) {
-            return MoviesDownloadService.TOP_RATED_MOVIES_PARAMETER;
+            return MovieContract.ORDER_BY_TOPRATED;
         } else {
             return "";
         }
@@ -117,7 +120,12 @@ public class MainActivityFragment extends Fragment
 
     @Override
     public void onClick(View view, int position) {
+        Cursor cursor = mAdapter.getCursor();
 
+        if (cursor != null && cursor.moveToPosition(position)) {
+            ((Callback) getActivity()).onItemSelected(
+                    MovieEntry.buildMovieUri(cursor.getLong(cursor.getColumnIndex(MovieEntry._ID))));
+        }
     }
 
     @Override
@@ -140,7 +148,7 @@ public class MainActivityFragment extends Fragment
         if (wayToOrder.equals(getString(R.string.pref_sort_by_popular))) {
             uri = MovieEntry.buildPopularMoviesUri();
         } else if (wayToOrder.equals(getString(R.string.pref_sort_by_rating))) {
-            uri = MovieEntry.buildFavoriteMoviesUri();
+            uri = MovieEntry.buildTopRatedMoviesUri();
         } else if (wayToOrder.equals(getString(R.string.pref_show_favorite_movies))) {
             uri = MovieEntry.buildFavoriteMoviesUri();
         }
@@ -155,5 +163,14 @@ public class MainActivityFragment extends Fragment
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        void onItemSelected(Uri dateUri);
     }
 }

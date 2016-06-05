@@ -3,7 +3,6 @@ package com.josecognizant.popmovies.util;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import com.josecognizant.popmovies.data.MovieContract;
  * Created by Jose on 05/06/2016.
  */
 public class MovieAdapter extends CursorRecyclerViewAdapter<MovieAdapter.MovieViewHolder> {
-    private static final String LOG_TAG = MovieAdapter.class.getSimpleName();
     private static OnRecyclerViewClickListener sItemClickListener;
     private Context mContext;
 
@@ -38,7 +36,6 @@ public class MovieAdapter extends CursorRecyclerViewAdapter<MovieAdapter.MovieVi
 
     @Override
     public void onBindViewHolder(MovieViewHolder viewHolder, Cursor cursor) {
-        Log.d(LOG_TAG, "Path " + cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER)));
         Glide.with(mContext)
                 .load(cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER)))
                 .into(viewHolder.mMoviePoster);
