@@ -2,9 +2,14 @@ package com.josecognizant.popmovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,22 +19,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.josecognizant.popmovies.model.Movie;
+import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
 import com.josecognizant.popmovies.service.MoviesDownloadService;
 import com.josecognizant.popmovies.util.MovieAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * A placeholder fragment containing a simple view.
+ * Fragment that handle the view with the list of movies
  */
 public class MainActivityFragment extends Fragment
-        implements MovieAdapter.OnItemClickListener {
+        implements MovieAdapter.OnRecyclerViewClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
-    private List<Movie> mMovieList;
+    private static final int MOVIE_LOADER = 0;
     private MovieAdapter mAdapter;
-    private RecyclerView mRecyclerView;
 
     public MainActivityFragment() {
     }
@@ -39,8 +41,15 @@ public class MainActivityFragment extends Fragment
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         setHasOptionsMenu(true);
+        initAdapter();
         initRecyclerView(rootView);
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(MOVIE_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -72,10 +81,14 @@ public class MainActivityFragment extends Fragment
     }
 
     private void initRecyclerView(View rootView) {
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_movie_list);
+        RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_movie_list);
         mRecyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         mRecyclerView.setLayoutManager(gridLayoutManager);
+    }
+
+    private void initAdapter() {
+        mAdapter = new MovieAdapter(getActivity(), null, this);
     }
 
     private void refreshMovies() {
@@ -102,30 +115,45 @@ public class MainActivityFragment extends Fragment
         }
     }
 
-    public void updateAdapterData(List<Movie> newMovies) {
-        if (mMovieList == null) {
-            mMovieList = new ArrayList<>();
-        }
-        mMovieList.clear();
-        mMovieList.addAll(newMovies);
-        if (mAdapter == null) {
-            mAdapter = new MovieAdapter(this, mMovieList, getActivity());
-        }
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+    @Override
+    public void onClick(View view, int position) {
+
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-        if (mMovieList != null && mMovieList.size() > position) {
-            Movie movie = mMovieList.get(position);
-            startMovieDetailsActivity(movie);
-        }
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri uri = getMovieUriToQuery();
+        return new CursorLoader(getActivity(),
+                uri,
+                null,
+                null,
+                null,
+                null);
     }
 
-    private void startMovieDetailsActivity(Movie movie) {
-        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-        intent.putExtra(MovieDetailsFragment.MOVIE_TO_SHOW, movie);
-        startActivity(intent);
+    private Uri getMovieUriToQuery() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String wayToOrder = prefs.getString(
+                getString(R.string.pref_sorting_model_key),
+                getString(R.string.pref_sort_by_popular));
+        Uri uri = null;
+        if (wayToOrder.equals(getString(R.string.pref_sort_by_popular))) {
+            uri = MovieEntry.buildPopularMoviesUri();
+        } else if (wayToOrder.equals(getString(R.string.pref_sort_by_rating))) {
+            uri = MovieEntry.buildFavoriteMoviesUri();
+        } else if (wayToOrder.equals(getString(R.string.pref_show_favorite_movies))) {
+            uri = MovieEntry.buildFavoriteMoviesUri();
+        }
+        return uri;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
     }
 }
