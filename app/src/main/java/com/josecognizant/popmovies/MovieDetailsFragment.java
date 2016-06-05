@@ -1,6 +1,6 @@
 package com.josecognizant.popmovies;
 
-import android.app.Activity;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.josecognizant.popmovies.model.Movie;
+import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
 
 /**
  * Fragment for showing details of movies
@@ -21,7 +21,6 @@ import com.josecognizant.popmovies.model.Movie;
 public class MovieDetailsFragment extends Fragment {
 
     public static final String DETAIL_URI = "URI";
-    private Movie mMovie = null;
     private TextView mTitle, mOverView, mReleaseYear, mVoteAverage;
     private ImageView mPoster;
     private Uri mUri;
@@ -47,7 +46,11 @@ public class MovieDetailsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateMovieToShow();
+        Cursor cursor = getActivity().getContentResolver().query(mUri, null, null, null, null);
+        if (cursor != null) {
+            setUIValues(cursor);
+            cursor.close();
+        }
     }
 
     private void getUriFromArguments() {
@@ -57,47 +60,35 @@ public class MovieDetailsFragment extends Fragment {
         }
     }
 
-    private void updateMovieToShow() {
-        if (mMovie == null) {
-            return;
-        }
-        Activity activity = getActivity();
-        setTitle((TextView) activity.findViewById(R.id.original_movie_title));
-        setOverview((TextView) activity.findViewById(R.id.overview));
-        setReleaseYear((TextView) activity.findViewById(R.id.release_year));
-        setVoteAverage((TextView) activity.findViewById(R.id.vote_average));
-        setMovieImage((ImageView) activity.findViewById(R.id.movie_image));
-    }
-
-    private void setTitle(TextView titleTextView) {
-        if (titleTextView != null) {
-            titleTextView.setText(mMovie.getOriginalTitle());
+    private void setUIValues(Cursor data) {
+        if (data != null && data.moveToFirst()) {
+            setTitle(data.getString(data.getColumnIndex(MovieEntry.COLUMN_TITLE)));
+            setOverview(data.getString(data.getColumnIndex(MovieEntry.COLUMN_OVERVIEW)));
+            setReleaseYear(data.getString(data.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE)));
+            setVoteAverage(data.getString(data.getColumnIndex(MovieEntry.COLUMN_VOTE_AVERAGE)));
+            setMovieImage(data.getString(data.getColumnIndex(MovieEntry.COLUMN_POSTER)));
         }
     }
 
-    private void setOverview(TextView overviewTextView) {
-        if (overviewTextView != null) {
-            overviewTextView.setText(mMovie.getOverview());
-        }
+    private void setTitle(String title) {
+        mTitle.setText(title);
     }
 
-    private void setReleaseYear(TextView releaseYearTextView) {
-        if (releaseYearTextView != null) {
-            releaseYearTextView.setText(mMovie.getReleaseDate().substring(0, 4));
-        }
+    private void setOverview(String overview) {
+        mOverView.setText(overview);
     }
 
-    private void setVoteAverage(TextView voteAverageTextView) {
-        if (voteAverageTextView != null) {
-            voteAverageTextView.setText(String.valueOf(mMovie.getVoteAverage()));
-        }
+    private void setReleaseYear(String releaseDate) {
+        mReleaseYear.setText(releaseDate.substring(0, 4));
     }
 
-    private void setMovieImage(ImageView movieImageView) {
-        if (movieImageView != null) {
-            Glide.with(getActivity())
-                    .load(mMovie.getThumbnailPosterPath())
-                    .into(movieImageView);
-        }
+    private void setVoteAverage(String voteAverage) {
+        mVoteAverage.setText(String.valueOf(voteAverage));
+    }
+
+    private void setMovieImage(String movieImagePath) {
+        Glide.with(getActivity())
+                .load(movieImagePath)
+                .into(mPoster);
     }
 }
