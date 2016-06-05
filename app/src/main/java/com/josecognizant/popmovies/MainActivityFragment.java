@@ -13,9 +13,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -57,28 +54,6 @@ public class MainActivityFragment extends Fragment
     public void onStart() {
         super.onStart();
         refreshMovies();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.movie_list_fragment_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                startSettingsActivity();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void startSettingsActivity() {
-        Intent intent = new Intent(getActivity(), SettingsActivity.class);
-        startActivity(intent);
     }
 
     private void initRecyclerView(View rootView) {
