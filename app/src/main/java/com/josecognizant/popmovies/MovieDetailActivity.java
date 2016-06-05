@@ -9,13 +9,28 @@ import android.support.v7.widget.Toolbar;
  * Activity with details of movies
  * Created by Jose on 26/05/2016.
  */
-public class MovieDetailActivity  extends AppCompatActivity {
+public class MovieDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         setupActionBar();
+        if (savedInstanceState == null) {
+            addDetailFragment();
+        }
+    }
+
+    private void addDetailFragment() {
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(MovieDetailsFragment.DETAIL_URI, getIntent().getData());
+
+        MovieDetailsFragment fragment = new MovieDetailsFragment();
+        fragment.setArguments(arguments);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.movie_details_container, fragment)
+                .commit();
     }
 
     private void setupActionBar() {
