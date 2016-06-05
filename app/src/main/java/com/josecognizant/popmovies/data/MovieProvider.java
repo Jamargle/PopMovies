@@ -1,6 +1,7 @@
 package com.josecognizant.popmovies.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -23,6 +24,7 @@ public class MovieProvider extends ContentProvider {
     public static final int MOVIES_ORDER_BY_POPULAR = 101;
     public static final int MOVIES_ORDER_BY_RATING = 102;
     public static final int MOVIES_FAVORITES = 103;
+    public static final int MOVIE_BY_ID = 104;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -39,6 +41,7 @@ public class MovieProvider extends ContentProvider {
                 MOVIES_ORDER_BY_RATING);
         matcher.addURI(authority, MovieContract.PATH_MOVIES + "/" + MovieContract.FAVORITE_MOVIES,
                 MOVIES_FAVORITES);
+        matcher.addURI(authority, MovieContract.PATH_MOVIES + "/*", MOVIE_BY_ID);
 
         return matcher;
     }
@@ -79,6 +82,20 @@ public class MovieProvider extends ContentProvider {
 
             case MOVIES_FAVORITES: {
                 cursorToRet = getFavoriteMovies(projection, selection, selectionArgs, sortOrder);
+                break;
+            }
+
+            case MOVIE_BY_ID: {
+                selection = MovieContract.MovieEntry._ID + " = '" + ContentUris.parseId(uri) + "'";
+                cursorToRet = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.MovieEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
             }
 
@@ -148,6 +165,8 @@ public class MovieProvider extends ContentProvider {
                 return MovieContract.MovieEntry.CONTENT_TYPE;
             case MOVIES:
                 return MovieContract.MovieEntry.CONTENT_TYPE;
+            case MOVIE_BY_ID:
+                return MovieContract.MovieEntry.CONTENT_ITEM_TYPE;
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

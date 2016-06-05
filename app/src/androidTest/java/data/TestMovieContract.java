@@ -12,6 +12,19 @@ import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
  */
 public class TestMovieContract extends AndroidTestCase {
 
+    private static final long TEST_MOVIE_ID = 12345;
+
+    public void testBuildMovieWithAppendedId() {
+        Uri movieByIdUri = MovieEntry.buildMovieUri(TEST_MOVIE_ID);
+        assertNotNull("Error: Null Uri returned.  You must fill-in buildMovieUri in " +
+                "MovieContract.", movieByIdUri);
+        assertEquals("Error: Movie ID not properly appended to the end of the Uri",
+                TEST_MOVIE_ID, Long.parseLong(movieByIdUri.getLastPathSegment()));
+        assertEquals("Error: MovieByID Uri doesn't match our expected result",
+                movieByIdUri.toString(),
+                "content://com.josecognizant.popmovies.app/movie/" + TEST_MOVIE_ID);
+    }
+
     public void testBuildPopularMoviesUri() {
         Uri popularMoviesUri = MovieEntry.buildPopularMoviesUri();
         assertNotNull("Error: Null Uri returned.  You must fill-in buildPopularMoviesUri in " +

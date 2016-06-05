@@ -63,14 +63,6 @@ public class TestMovieProvider extends AndroidTestCase {
         }
     }
 
-    public void deleteAllRecordsFromDB() {
-        MovieDbHelper dbHelper = new MovieDbHelper(mContext);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        db.delete(MovieEntry.TABLE_NAME, null, null);
-        db.close();
-    }
-
     public void deleteAllRecords() {
         deleteAllRecordsFromProvider();
     }
@@ -126,6 +118,12 @@ public class TestMovieProvider extends AndroidTestCase {
         // vnd.android.cursor.dir/com.josecognizant.popmovies.app/movie/favorite
         assertEquals("Error: the MovieEntry CONTENT_URI for favorite movies should return " +
                 "MovieEntry.CONTENT_TYPE", MovieEntry.CONTENT_TYPE, type);
+
+        // content://com.josecognizant.popmovies.app/movie/123
+        type = mContext.getContentResolver().getType(MovieEntry.buildMovieUri(123));
+        // vnd.android.cursor.item/com.josecognizant.popmovies.app/movie/123
+        assertEquals("Error: the MovieEntry CONTENT_URI for movie by ID should return " +
+                "MovieEntry.CONTENT_ITEM_TYPE", MovieEntry.CONTENT_ITEM_TYPE, type);
     }
 
     public void testBasicMovieQuery() {
