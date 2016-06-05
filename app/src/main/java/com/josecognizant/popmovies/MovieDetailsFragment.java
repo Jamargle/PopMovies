@@ -20,9 +20,10 @@ import com.josecognizant.popmovies.model.Movie;
  */
 public class MovieDetailsFragment extends Fragment {
 
-    public static final String MOVIE_TO_SHOW = "movie_to_show";
     public static final String DETAIL_URI = "URI";
     private Movie mMovie = null;
+    private TextView mTitle, mOverView, mReleaseYear, mVoteAverage;
+    private ImageView mPoster;
     private Uri mUri;
 
     @Nullable
@@ -30,7 +31,17 @@ public class MovieDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         getUriFromArguments();
-        return inflater.inflate(R.layout.fragment_movie_details, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
+        initializeUIViews(rootView);
+        return rootView;
+    }
+
+    private void initializeUIViews(View rootView) {
+        mTitle = (TextView) rootView.findViewById(R.id.original_movie_title);
+        mOverView = (TextView) rootView.findViewById(R.id.overview);
+        mReleaseYear = (TextView) rootView.findViewById(R.id.release_year);
+        mVoteAverage = (TextView) rootView.findViewById(R.id.vote_average);
+        mPoster = (ImageView) rootView.findViewById(R.id.movie_image);
     }
 
     @Override
