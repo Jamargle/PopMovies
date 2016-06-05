@@ -1,6 +1,7 @@
 package com.josecognizant.popmovies.util;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,22 +11,20 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.R;
-import com.josecognizant.popmovies.model.Movie;
-
-import java.util.List;
+import com.josecognizant.popmovies.data.MovieContract;
 
 /**
  * Custom Adapter for RecyclerView in MainActivityFragment
- * Created by 552702 on 24/05/2016.
+ * Created by Jose on 05/06/2016.
  */
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
+public class MovieAdapter extends CursorRecyclerViewAdapter<MovieAdapter.MovieViewHolder> {
+    private static final String LOG_TAG = MovieAdapter.class.getSimpleName();
+    private static OnRecyclerViewClickListener sItemClickListener;
     private Context mContext;
-    private OnItemClickListener mClickListener;
-    private List<Movie> mList;
 
-    public MovieAdapter(OnItemClickListener listener, List<Movie> movies, Context context) {
-        mList = movies;
-        mClickListener = listener;
+    public MovieAdapter(Context context, Cursor cursor, OnRecyclerViewClickListener listener) {
+        super(cursor);
+        sItemClickListener = listener;
         mContext = context;
     }
 
@@ -38,20 +37,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     @Override
-    public void onBindViewHolder(MovieViewHolder holder, int position) {
-        Log.d("abcd", "Path " + mList.get(position).getThumbnailPosterPath());
+    public void onBindViewHolder(MovieViewHolder viewHolder, Cursor cursor) {
+        Log.d(LOG_TAG, "Path " + cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER)));
         Glide.with(mContext)
-                .load(mList.get(position).getThumbnailPosterPath())
-                .into(holder.mMoviePoster);
+                .load(cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER)))
+                .into(viewHolder.mMoviePoster);
     }
 
-    @Override
-    public int getItemCount() {
-        return mList.size();
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+    public interface OnRecyclerViewClickListener {
+        void onClick(View view, int position);
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -65,7 +59,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         @Override
         public void onClick(View v) {
-            mClickListener.onItemClick(v, getAdapterPosition());
+            sItemClickListener.onClick(v, getAdapterPosition());
         }
     }
 }
