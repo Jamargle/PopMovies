@@ -116,14 +116,13 @@ public class MovieProvider extends ContentProvider {
         return getMoviesWithOrder(projection, selection, selectionArgs, sortOrder, MovieContract.ORDER_BY_TOPRATED);
     }
 
-    private Cursor getFavoriteMovies(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        String newSelection = selection + " AND " +
-                MovieContract.MovieEntry.COLUMN_FAVORITE + " = 1";
-
+    private Cursor getMoviesWithOrder(String[] projection, String selection, String[] selectionArgs, String sortOrder, String typeOfOrder) {
+        selection = addSelectionField(selection, MovieContract.MovieEntry.COLUMN_ORDER_TYPE + " = ?");
+        selectionArgs = addSelectionArgumentsField(selectionArgs, typeOfOrder);
         return mOpenHelper.getReadableDatabase().query(
                 MovieContract.MovieEntry.TABLE_NAME,
                 projection,
-                newSelection,
+                selection,
                 selectionArgs,
                 null,
                 null,
@@ -131,24 +130,38 @@ public class MovieProvider extends ContentProvider {
         );
     }
 
-    private Cursor getMoviesWithOrder(String[] projection, String selection, String[] selectionArgs, String sortOrder, String typeOfOrder) {
-        String newSelection = selection + " AND " +
-                MovieContract.MovieEntry.COLUMN_ORDER_TYPE + " = ?";
-
-        List<String> allArguments = new ArrayList<>();
-        Collections.addAll(allArguments, selectionArgs);
-        allArguments.add(typeOfOrder);
-        String[] newSelectionArgs = (String[]) allArguments.toArray();
+    private Cursor getFavoriteMovies(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        selection = addSelectionField(selection, MovieContract.MovieEntry.COLUMN_FAVORITE + " = ?");
+        selectionArgs = addSelectionArgumentsField(selectionArgs, String.valueOf(0));
 
         return mOpenHelper.getReadableDatabase().query(
                 MovieContract.MovieEntry.TABLE_NAME,
                 projection,
-                newSelection,
-                newSelectionArgs,
+                selection,
+                selectionArgs,
                 null,
                 null,
                 sortOrder
         );
+    }
+
+    private String addSelectionField(String oldSelection, String fieldToAdd) {
+        if (oldSelection == null || oldSelection.isEmpty()) {
+            return fieldToAdd;
+        } else {
+            return oldSelection + " AND " + fieldToAdd;
+        }
+    }
+
+    private String[] addSelectionArgumentsField(String[] oldSelectionArg, String selectionArgToAdd) {
+        if (oldSelectionArg == null || oldSelectionArg.length == 0) {
+            return new String[]{selectionArgToAdd};
+        } else {
+            List<String> allArguments = new ArrayList<>();
+            Collections.addAll(allArguments, oldSelectionArg);
+            allArguments.add(selectionArgToAdd);
+            return ((String[]) allArguments.toArray());
+        }
     }
 
     @Nullable
