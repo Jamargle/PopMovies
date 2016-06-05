@@ -1,6 +1,7 @@
 package com.josecognizant.popmovies;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,26 +21,28 @@ import com.josecognizant.popmovies.model.Movie;
 public class MovieDetailsFragment extends Fragment {
 
     public static final String MOVIE_TO_SHOW = "movie_to_show";
-
+    public static final String DETAIL_URI = "URI";
     private Movie mMovie = null;
+    private Uri mUri;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        getUriFromArguments();
         return inflater.inflate(R.layout.fragment_movie_details, container, false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getMovieFromIntent();
         updateMovieToShow();
     }
 
-    private void getMovieFromIntent() {
-        if (getActivity().getIntent().hasExtra(MOVIE_TO_SHOW)) {
-            mMovie = getActivity().getIntent().getParcelableExtra(MOVIE_TO_SHOW);
+    private void getUriFromArguments() {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(DETAIL_URI);
         }
     }
 

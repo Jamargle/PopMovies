@@ -1,5 +1,6 @@
 package com.josecognizant.popmovies;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,17 @@ public class MovieDetailActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         setupActionBar();
+        setMovieAsFragmentArgument();
+    }
+
+    private void setMovieAsFragmentArgument() {
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(MovieDetailsFragment.DETAIL_URI, getIntent().getData());
+
+        Fragment fragment = getFragmentManager().findFragmentById(R.id.movie_details_fragment);
+        if (fragment != null) {
+            fragment.setArguments(arguments);
+        }
     }
 
     private void setupActionBar() {
