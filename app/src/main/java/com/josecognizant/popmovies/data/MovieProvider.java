@@ -132,7 +132,7 @@ public class MovieProvider extends ContentProvider {
 
     private Cursor getFavoriteMovies(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         selection = addSelectionField(selection, MovieContract.MovieEntry.COLUMN_FAVORITE + " = ?");
-        selectionArgs = addSelectionArgumentsField(selectionArgs, String.valueOf(0));
+        selectionArgs = addSelectionArgumentsField(selectionArgs, String.valueOf(1));
 
         return mOpenHelper.getReadableDatabase().query(
                 MovieContract.MovieEntry.TABLE_NAME,

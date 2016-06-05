@@ -1,5 +1,6 @@
 package com.josecognizant.popmovies;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,9 +28,11 @@ public class MovieDetailsFragment extends Fragment
 
     public static final String DETAIL_URI = "URI";
     private static final int DETAIL_LOADER = 0;
-    private TextView mTitle, mOverView, mReleaseYear, mVoteAverage;
+    private TextView mTitleView, mOverView, mReleaseYear, mVoteAverage;
     private ImageView mPoster;
     private Uri mUri;
+    private String mTitle, mOrderType;
+    private int mFavoriteState = -1;
 
     @Nullable
     @Override
@@ -46,12 +50,29 @@ public class MovieDetailsFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        storeCurrentMovieState();
+    }
+
     private void initializeUIViews(View rootView) {
-        mTitle = (TextView) rootView.findViewById(R.id.original_movie_title);
+        mTitleView = (TextView) rootView.findViewById(R.id.original_movie_title);
         mOverView = (TextView) rootView.findViewById(R.id.overview);
         mReleaseYear = (TextView) rootView.findViewById(R.id.release_year);
         mVoteAverage = (TextView) rootView.findViewById(R.id.vote_average);
         mPoster = (ImageView) rootView.findViewById(R.id.movie_image);
+        Button button = (Button) rootView.findViewById(R.id.mark_as_favorite_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeFavoriteState();
+            }
+        });
+    }
+
+    private void changeFavoriteState() {
+        mFavoriteState = (mFavoriteState == 1) ? 0 : 1;
     }
 
     private void getUriFromArguments() {
@@ -62,7 +83,7 @@ public class MovieDetailsFragment extends Fragment
     }
 
     private void setTitle(String title) {
-        mTitle.setText(title);
+        mTitleView.setText(title);
     }
 
     private void setOverview(String overview) {
@@ -81,6 +102,10 @@ public class MovieDetailsFragment extends Fragment
         Glide.with(getActivity())
                 .load(movieImagePath)
                 .into(mPoster);
+    }
+
+    private void setFavoriteState(int value) {
+        mFavoriteState = value;
     }
 
     @Override
@@ -106,6 +131,8 @@ public class MovieDetailsFragment extends Fragment
             return;
         }
         setUIValues(data);
+        mTitle = data.getString(data.getColumnIndex(MovieEntry.COLUMN_TITLE));
+        mOrderType = data.getString(data.getColumnIndex(MovieEntry.COLUMN_ORDER_TYPE));
     }
 
     @Override
@@ -120,6 +147,17 @@ public class MovieDetailsFragment extends Fragment
             setReleaseYear(data.getString(data.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE)));
             setVoteAverage(data.getString(data.getColumnIndex(MovieEntry.COLUMN_VOTE_AVERAGE)));
             setMovieImage(data.getString(data.getColumnIndex(MovieEntry.COLUMN_POSTER)));
+            setFavoriteState(data.getInt(data.getColumnIndex(MovieEntry.COLUMN_FAVORITE)));
         }
+    }
+
+    private void storeCurrentMovieState() {
+        ContentValues currentFavoriteState = new ContentValues();
+        currentFavoriteState.put(MovieEntry.COLUMN_FAVORITE, mFavoriteState);
+        getActivity().getContentResolver().update(
+                MovieEntry.CONTENT_URI,
+                currentFavoriteState,
+                MovieEntry.COLUMN_TITLE + " = ? AND " + MovieEntry.COLUMN_ORDER_TYPE + " = ?",
+                new String[]{mTitle, mOrderType});
     }
 }
