@@ -31,6 +31,7 @@ public class TestMovieProvider extends AndroidTestCase {
 
         for (int i = 0; i < BULK_INSERT_RECORDS_TO_INSERT; i++) {
             ContentValues movieValues = new ContentValues();
+            movieValues.put(MovieEntry.COLUMN_MOVIE_ID, TestUtilities.TEST_MOVIE_API_ID + i);
             movieValues.put(MovieEntry.COLUMN_TITLE, TestUtilities.TEST_MOVIE_TITLE + " " + (i + 1));
             movieValues.put(MovieEntry.COLUMN_POSTER, TestUtilities.TEST_MOVIE_POSTER);
             movieValues.put(MovieEntry.COLUMN_OVERVIEW, TestUtilities.TEST_MOVIE_OVERVIEW);

@@ -19,6 +19,7 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
+    private int movieApiId;
     private String originalTitle;
     private String overview;
     private String thumbnailPosterPath;
@@ -28,6 +29,7 @@ public class Movie implements Parcelable {
     private int favorite;
 
     Movie(Builder builder) {
+        this.movieApiId = builder.movieApiId;
         this.originalTitle = builder.originalTitle;
         this.overview = builder.overview;
         this.thumbnailPosterPath = builder.thumbnailPosterPath;
@@ -38,6 +40,7 @@ public class Movie implements Parcelable {
     }
 
     protected Movie(Parcel in) {
+        movieApiId = in.readInt();
         originalTitle = in.readString();
         overview = in.readString();
         thumbnailPosterPath = in.readString();
@@ -45,6 +48,10 @@ public class Movie implements Parcelable {
         releaseDate = in.readString();
         orderType = in.readString();
         favorite = in.readInt();
+    }
+
+    public int getMovieApiId() {
+        return movieApiId;
     }
 
     public String getOriginalTitle() {
@@ -94,6 +101,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(movieApiId);
         dest.writeString(originalTitle);
         dest.writeString(overview);
         dest.writeString(thumbnailPosterPath);
@@ -104,6 +112,7 @@ public class Movie implements Parcelable {
     }
 
     public static class Builder {
+        private int movieApiId;
         private String originalTitle;
         private String overview;
         private String thumbnailPosterPath;
@@ -111,6 +120,11 @@ public class Movie implements Parcelable {
         private String releaseDate;
         private String orderType;
         private int favorite;
+
+        public Builder movieApiId(int movieApiId) {
+            this.movieApiId = movieApiId;
+            return this;
+        }
 
         public Builder originalTitle(String originalTitle) {
             this.originalTitle = originalTitle;
