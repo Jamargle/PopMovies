@@ -1,14 +1,21 @@
 package com.josecognizant.popmovies.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Class representing a video of a movie
  * Created by Jose on 06/06/2016.
  */
 public class Video {
+    @SerializedName("key")
     private String urlKey;
+    @SerializedName("name")
     private String name;
+    @SerializedName("site")
     private String site;
+    @SerializedName("size")
     private int size;
+    @SerializedName("type")
     private String type;
 
     public String getUrlKey() {

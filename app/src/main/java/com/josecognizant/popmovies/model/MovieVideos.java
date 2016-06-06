@@ -1,5 +1,7 @@
 package com.josecognizant.popmovies.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -7,7 +9,9 @@ import java.util.List;
  * Created by Jose on 06/06/2016.
  */
 public class MovieVideos {
+    @SerializedName("id")
     private int movieId;
+    @SerializedName("results")
     private List<Video> videos;
 
     public int getId() {
