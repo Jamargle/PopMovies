@@ -19,6 +19,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Fragment for showing details of movies
  * Created by Jose on 26/05/2016.
@@ -28,8 +32,25 @@ public class MovieDetailsFragment extends Fragment
 
     public static final String DETAIL_URI = "URI";
     private static final int DETAIL_LOADER = 0;
-    private TextView mTitleView, mOverView, mReleaseYear, mVoteAverage;
-    private ImageView mPoster;
+
+    @BindView(R.id.original_movie_title)
+    TextView mTitleView;
+    @BindView(R.id.overview)
+    TextView mOverView;
+    @BindView(R.id.release_year)
+    TextView mReleaseYear;
+    @BindView(R.id.vote_average)
+    TextView mVoteAverage;
+    @BindView(R.id.movie_image)
+    ImageView mPoster;
+    @BindView(R.id.mark_as_favorite_button)
+    Button mFavoriteButton;
+
+    @OnClick(R.id.mark_as_favorite_button)
+    void changeFavoriteState() {
+        mFavoriteState = (mFavoriteState == 1) ? 0 : 1;
+    }
+
     private Uri mUri;
     private String mTitle, mOrderType;
     private int mFavoriteState = -1;
@@ -40,7 +61,7 @@ public class MovieDetailsFragment extends Fragment
                              @Nullable Bundle savedInstanceState) {
         getUriFromArguments();
         View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
-        initializeUIViews(rootView);
+        ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -54,25 +75,6 @@ public class MovieDetailsFragment extends Fragment
     public void onPause() {
         super.onPause();
         storeCurrentMovieState();
-    }
-
-    private void initializeUIViews(View rootView) {
-        mTitleView = (TextView) rootView.findViewById(R.id.original_movie_title);
-        mOverView = (TextView) rootView.findViewById(R.id.overview);
-        mReleaseYear = (TextView) rootView.findViewById(R.id.release_year);
-        mVoteAverage = (TextView) rootView.findViewById(R.id.vote_average);
-        mPoster = (ImageView) rootView.findViewById(R.id.movie_image);
-        Button button = (Button) rootView.findViewById(R.id.mark_as_favorite_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeFavoriteState();
-            }
-        });
-    }
-
-    private void changeFavoriteState() {
-        mFavoriteState = (mFavoriteState == 1) ? 0 : 1;
     }
 
     private void getUriFromArguments() {
