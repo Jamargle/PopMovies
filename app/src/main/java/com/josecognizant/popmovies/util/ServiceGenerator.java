@@ -9,8 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Jose on 06/06/2016.
  */
 public class ServiceGenerator {
-
-    public static final String API_BASE_URL = "http://api.themoviedb.org/3";
+    public static final String API_BASE_URL = "http://api.themoviedb.org/3/";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 

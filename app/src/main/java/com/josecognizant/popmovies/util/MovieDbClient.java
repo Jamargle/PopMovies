@@ -5,6 +5,7 @@ import com.josecognizant.popmovies.model.MovieVideos;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Interface to define end points to get videos
@@ -12,6 +13,6 @@ import retrofit2.http.Path;
  */
 public interface MovieDbClient {
 
-    @GET("movie/{id}/videos?api_key={api_key}")
-    Call<MovieVideos> getListOfVideos(@Path("id") int movieId, @Path("api_key") int apiKey);
+    @GET("movie/{id}/videos")
+    Call<MovieVideos> getListOfVideos(@Path("id") int movieId, @Query("api_key") String apiKey);
 }
