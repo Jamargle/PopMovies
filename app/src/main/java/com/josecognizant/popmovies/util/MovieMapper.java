@@ -16,6 +16,7 @@ public class MovieMapper {
     public static ContentValues mapToCV(Movie movie) {
         ContentValues movieContentValues = new ContentValues();
         if (movie != null) {
+            movieContentValues.put(MovieEntry.COLUMN_MOVIE_ID, movie.getMovieApiId());
             movieContentValues.put(MovieEntry.COLUMN_TITLE, movie.getOriginalTitle());
             movieContentValues.put(MovieEntry.COLUMN_POSTER, movie.getThumbnailPosterPath());
             movieContentValues.put(MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
@@ -40,6 +41,7 @@ public class MovieMapper {
     public static Movie mapToMovie(ContentValues movieValues) {
         if (movieValues != null) {
             return new Movie.Builder()
+                    .movieApiId(movieValues.getAsInteger(MovieEntry.COLUMN_MOVIE_ID))
                     .originalTitle(movieValues.getAsString(MovieEntry.COLUMN_TITLE))
                     .thumbnailPosterPath(movieValues.getAsString(MovieEntry.COLUMN_POSTER))
                     .overview(movieValues.getAsString(MovieEntry.COLUMN_OVERVIEW))

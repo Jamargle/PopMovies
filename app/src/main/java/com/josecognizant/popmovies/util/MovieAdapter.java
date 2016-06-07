@@ -12,6 +12,10 @@ import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.R;
 import com.josecognizant.popmovies.data.MovieContract;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Custom Adapter for RecyclerView in MainActivityFragment
  * Created by Jose on 05/06/2016.
@@ -46,15 +50,16 @@ public class MovieAdapter extends CursorRecyclerViewAdapter<MovieAdapter.MovieVi
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        protected ImageView mMoviePoster;
+        @BindView(R.id.image_container)
+        ImageView mMoviePoster;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
-            mMoviePoster = (ImageView) itemView.findViewById(R.id.image_container);
-            itemView.setOnClickListener(this);
+            ButterKnife.bind(this, itemView);
         }
 
         @Override
+        @OnClick(R.id.image_container)
         public void onClick(View v) {
             sItemClickListener.onClick(v, getAdapterPosition());
         }

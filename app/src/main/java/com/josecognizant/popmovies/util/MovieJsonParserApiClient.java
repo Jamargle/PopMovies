@@ -20,6 +20,7 @@ public class MovieJsonParserApiClient {
     private static final String OVERVIEW_PARAMETER = "overview";
     private static final String USER_RATING_PARAMETER = "vote_average";
     private static final String RELEASE_DATE_PARAMETER = "release_date";
+    private static final String MOVIE_ID_PARAMETER = "id";
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_MEDIUM_SIZE = "/w185";
 
@@ -51,7 +52,12 @@ public class MovieJsonParserApiClient {
     private static Movie extractMovie(int index) throws JSONException {
         JSONObject jsonMovie = sMovieData.getJSONObject(index);
         String title = "", overview = "", posterPath = "", releaseDate = "";
+        int movieApiId = 0;
         float voteAverage = 0.0f;
+
+        if (jsonMovie.has(MOVIE_ID_PARAMETER)) {
+            movieApiId = jsonMovie.getInt(MOVIE_ID_PARAMETER);
+        }
         if (jsonMovie.has(ORIGINAL_TITLE_PARAMETER)) {
             title = jsonMovie.getString(ORIGINAL_TITLE_PARAMETER);
         }
@@ -68,6 +74,7 @@ public class MovieJsonParserApiClient {
             voteAverage = Float.parseFloat(jsonMovie.getString(USER_RATING_PARAMETER));
         }
         return new Movie.Builder()
+                .movieApiId(movieApiId)
                 .originalTitle(title)
                 .overview(overview)
                 .thumbnailPosterPath(BASE_IMAGE_URL + IMAGE_MEDIUM_SIZE + posterPath)

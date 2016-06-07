@@ -1,17 +1,14 @@
 package com.josecognizant.popmovies;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.test.AndroidTestCase;
 
 import com.josecognizant.popmovies.data.MovieContract;
-import com.josecognizant.popmovies.data.MovieDbHelper;
 import com.josecognizant.popmovies.util.MovieUtilities;
 import com.josecognizant.popmovies.utils.PollingCheck;
 
@@ -23,6 +20,7 @@ import java.util.Set;
  * Created by Jose on 03/06/2016.
  */
 public class TestUtilities extends AndroidTestCase {
+    public static final String TEST_MOVIE_API_ID = "12345678";
     public static final String TEST_MOVIE_TITLE = "This is the title of the movie";
     public static final String TEST_MOVIE_POSTER = "/1213fasdfa";
     public static final String TEST_MOVIE_OVERVIEW = "This is the overview of the movie";
@@ -57,6 +55,7 @@ public class TestUtilities extends AndroidTestCase {
 
     public static ContentValues createMovieValues() {
         ContentValues movieValues = new ContentValues();
+        movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, TEST_MOVIE_API_ID);
         movieValues.put(MovieContract.MovieEntry.COLUMN_TITLE, TEST_MOVIE_TITLE);
         movieValues.put(MovieContract.MovieEntry.COLUMN_POSTER, TEST_MOVIE_POSTER);
         movieValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, TEST_MOVIE_OVERVIEW);
@@ -66,21 +65,6 @@ public class TestUtilities extends AndroidTestCase {
         movieValues.put(MovieContract.MovieEntry.COLUMN_FAVORITE, TEST_MOVIE_FAVORITE);
 
         return movieValues;
-    }
-
-    public static long insertMovieValues(Context context) {
-        // insert our test records into the database
-        MovieDbHelper dbHelper = new MovieDbHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues testValues = TestUtilities.createMovieValues();
-
-        long movieRowId;
-        movieRowId = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, testValues);
-
-        // Verify we got a row back.
-        assertTrue("Error: Failure to insert the test movie values", movieRowId != -1);
-
-        return movieRowId;
     }
 
     public static TestContentObserver getTestContentObserver() {
