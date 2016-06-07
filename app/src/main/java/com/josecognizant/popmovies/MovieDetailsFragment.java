@@ -1,6 +1,7 @@
 package com.josecognizant.popmovies;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,7 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,9 @@ import com.josecognizant.popmovies.model.MovieVideos;
 import com.josecognizant.popmovies.model.Video;
 import com.josecognizant.popmovies.util.MovieDbClient;
 import com.josecognizant.popmovies.util.ServiceGenerator;
+import com.josecognizant.popmovies.util.VideosAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,10 +42,12 @@ import retrofit2.Response;
  * Created by Jose on 26/05/2016.
  */
 public class MovieDetailsFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<Cursor> {
+        implements VideosAdapter.OnRecyclerViewClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String DETAIL_URI = "URI";
     private static final int DETAIL_LOADER = 0;
+    private static final String VIDEO_SITE_YOUTUBE = "YouTube";
 
     @BindView(R.id.original_movie_title)
     TextView mTitleView;
@@ -53,6 +59,8 @@ public class MovieDetailsFragment extends Fragment
     TextView mVoteAverage;
     @BindView(R.id.movie_image)
     ImageView mPoster;
+    @BindView(R.id.rv_trailer_container)
+    RecyclerView mVideoRecyclerView;
     @BindView(R.id.mark_as_favorite_button)
     Button mFavoriteButton;
 
@@ -61,6 +69,8 @@ public class MovieDetailsFragment extends Fragment
         mFavoriteState = (mFavoriteState == 1) ? 0 : 1;
     }
 
+    private List<Video> mVideoList;
+    private VideosAdapter mVideosAdapter;
     private Uri mUri;
     private String mTitle, mOrderType;
     private int mFavoriteState = -1, mApiMovieId;
@@ -72,7 +82,21 @@ public class MovieDetailsFragment extends Fragment
         getUriFromArguments();
         View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
         ButterKnife.bind(this, rootView);
+        initVideosAdapter();
+        initRecyclerView();
         return rootView;
+    }
+
+    private void initVideosAdapter() {
+        mVideoList = new ArrayList<>();
+        mVideosAdapter = new VideosAdapter(mVideoList, this);
+    }
+
+    private void initRecyclerView() {
+        mVideoRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mVideoRecyclerView.setLayoutManager(layoutManager);
+        mVideoRecyclerView.setAdapter(mVideosAdapter);
     }
 
     @Override
@@ -185,15 +209,32 @@ public class MovieDetailsFragment extends Fragment
                 MovieVideos videos = response.body();
                 List<Video> videoList = videos.getResults();
                 if (videoList != null) {
-                    for (Video video : videoList) {
-                        Log.d("pppp", video.getName() + " (" + video.getUrlKey() + ")");
-                    }
+                    mVideoList = videoList;
+                } else {
+                    mVideoList = new ArrayList<>();
                 }
+                mVideosAdapter.changeDataSet(mVideoList);
             }
 
             @Override
             public void onFailure(Call<MovieVideos> call, Throwable t) {
             }
         });
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        showThisVideo(mVideoList.get(position));
+    }
+
+    private void showThisVideo(Video video) {
+        String url = null;
+        if (video.getSite().equals(VIDEO_SITE_YOUTUBE)) {
+            url = String.format(getString(R.string.base_url_youtube), video.getUrlKey());
+        }
+        if (url != null && !url.isEmpty()) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            getActivity().startActivity(intent);
+        }
     }
 }
