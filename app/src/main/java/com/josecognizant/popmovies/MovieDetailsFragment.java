@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
+import com.josecognizant.popmovies.model.MovieVideos;
+import com.josecognizant.popmovies.model.Video;
+import com.josecognizant.popmovies.util.MovieDbClient;
+import com.josecognizant.popmovies.util.ServiceGenerator;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Fragment for showing details of movies
@@ -53,7 +63,7 @@ public class MovieDetailsFragment extends Fragment
 
     private Uri mUri;
     private String mTitle, mOrderType;
-    private int mFavoriteState = -1;
+    private int mFavoriteState = -1, mApiMovieId;
 
     @Nullable
     @Override
@@ -135,6 +145,8 @@ public class MovieDetailsFragment extends Fragment
         setUIValues(data);
         mTitle = data.getString(data.getColumnIndex(MovieEntry.COLUMN_TITLE));
         mOrderType = data.getString(data.getColumnIndex(MovieEntry.COLUMN_ORDER_TYPE));
+        mApiMovieId = data.getInt(data.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID));
+        getVideosForTheMovie();
     }
 
     @Override
@@ -161,5 +173,27 @@ public class MovieDetailsFragment extends Fragment
                 currentFavoriteState,
                 MovieEntry.COLUMN_TITLE + " = ? AND " + MovieEntry.COLUMN_ORDER_TYPE + " = ?",
                 new String[]{mTitle, mOrderType});
+    }
+
+    private void getVideosForTheMovie() {
+        MovieDbClient client = ServiceGenerator.createService(MovieDbClient.class);
+        Call<MovieVideos> call = client.getListOfVideos(mApiMovieId, BuildConfig.MOVIES_API_KEY);
+
+        call.enqueue(new Callback<MovieVideos>() {
+            @Override
+            public void onResponse(Call<MovieVideos> call, Response<MovieVideos> response) {
+                MovieVideos videos = response.body();
+                List<Video> videoList = videos.getResults();
+                if (videoList != null) {
+                    for (Video video : videoList) {
+                        Log.d("pppp", video.getName() + " (" + video.getUrlKey() + ")");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieVideos> call, Throwable t) {
+            }
+        });
     }
 }
