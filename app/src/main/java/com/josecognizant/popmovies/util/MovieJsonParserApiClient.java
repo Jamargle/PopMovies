@@ -1,6 +1,7 @@
 package com.josecognizant.popmovies.util;
 
-import com.josecognizant.popmovies.model.Movie;
+
+import com.josecognizant.popmovies.domain.model.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
