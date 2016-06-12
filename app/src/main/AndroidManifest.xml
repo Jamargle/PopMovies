@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.josecognizant.popmovies">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,6 +21,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".MovieDetailActivity"
+            android:parentActivityName=".ui.movie_grid.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.movie_grid.MainActivity" />
+        </activity>
+        <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".ui.movie_grid.MainActivity">
@@ -26,6 +36,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.josecognizant.popmovies.ui.movie_grid.MainActivity" />
         </activity>
+
+        <service android:name=".service.MoviesDownloadService" />
+        <provider
+            android:name=".data.MovieProvider"
+            android:authorities="com.josecognizant.popmovies.app"
+            android:exported="false" />
     </application>
 
 </manifest>
