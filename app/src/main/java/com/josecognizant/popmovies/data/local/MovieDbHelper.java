@@ -1,10 +1,10 @@
-package com.josecognizant.popmovies.data;
+package com.josecognizant.popmovies.data.local;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
+import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
 
 /**
  * Helper to interact with the local database

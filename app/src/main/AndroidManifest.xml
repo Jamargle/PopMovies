@@ -39,7 +39,7 @@
 
         <service android:name=".service.MoviesDownloadService" />
         <provider
-            android:name=".data.MovieProvider"
+            android:name=".data.local.MovieProvider"
             android:authorities="com.josecognizant.popmovies.app"
             android:exported="false" />
     </application>

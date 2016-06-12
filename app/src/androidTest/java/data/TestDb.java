@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
 import com.josecognizant.popmovies.TestUtilities;
-import com.josecognizant.popmovies.data.MovieContract;
-import com.josecognizant.popmovies.data.MovieDbHelper;
+import com.josecognizant.popmovies.data.local.MovieContract;
+import com.josecognizant.popmovies.data.local.MovieDbHelper;
 
 import java.util.HashSet;
 

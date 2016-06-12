@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.data;
+package com.josecognizant.popmovies.data.local;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;

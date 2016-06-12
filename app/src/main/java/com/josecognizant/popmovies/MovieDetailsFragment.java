@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
+import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
 import com.josecognizant.popmovies.model.MovieVideos;
 import com.josecognizant.popmovies.model.Video;
 import com.josecognizant.popmovies.util.MovieDbClient;

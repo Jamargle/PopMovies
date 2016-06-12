@@ -2,7 +2,7 @@ package com.josecognizant.popmovies.util;
 
 import android.content.ContentValues;
 
-import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
+import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
 import com.josecognizant.popmovies.domain.model.Movie;
 
 import java.util.ArrayList;

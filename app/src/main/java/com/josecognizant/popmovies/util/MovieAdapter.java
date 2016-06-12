@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.R;
-import com.josecognizant.popmovies.data.MovieContract;
+import com.josecognizant.popmovies.data.local.MovieContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

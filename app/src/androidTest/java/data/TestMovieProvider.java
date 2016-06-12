@@ -12,10 +12,10 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.josecognizant.popmovies.TestUtilities;
-import com.josecognizant.popmovies.data.MovieContract;
-import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
-import com.josecognizant.popmovies.data.MovieDbHelper;
-import com.josecognizant.popmovies.data.MovieProvider;
+import com.josecognizant.popmovies.data.local.MovieContract;
+import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
+import com.josecognizant.popmovies.data.local.MovieDbHelper;
+import com.josecognizant.popmovies.data.local.MovieProvider;
 
 /**
  * Tests for ContentProvider class
