@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.util;
+package com.josecognizant.popmovies.data.network;
 
 import com.josecognizant.popmovies.model.MovieVideos;
 

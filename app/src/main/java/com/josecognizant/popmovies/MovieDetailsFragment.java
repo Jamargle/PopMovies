@@ -23,7 +23,7 @@ import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
 import com.josecognizant.popmovies.model.MovieVideos;
 import com.josecognizant.popmovies.model.Video;
-import com.josecognizant.popmovies.util.MovieDbClient;
+import com.josecognizant.popmovies.data.network.MovieDbClient;
 import com.josecognizant.popmovies.util.ServiceGenerator;
 import com.josecognizant.popmovies.util.VideosAdapter;
 
