@@ -3,6 +3,8 @@ package com.josecognizant.popmovies.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Class representing the Movie entity
  * Created by Jose on 24/05/2016.
@@ -19,11 +21,17 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
+    @SerializedName("id")
     private int movieApiId;
+    @SerializedName("original_title")
     private String originalTitle;
+    @SerializedName("overview")
     private String overview;
+    @SerializedName("poster_path")
     private String thumbnailPosterPath;
+    @SerializedName("vote_average")
     private float voteAverage;
+    @SerializedName("release_date")
     private String releaseDate;
     private String orderType;
     private int favorite;
