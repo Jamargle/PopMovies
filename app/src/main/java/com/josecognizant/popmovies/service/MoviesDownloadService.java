@@ -11,7 +11,7 @@ import com.josecognizant.popmovies.BuildConfig;
 import com.josecognizant.popmovies.data.local.MovieContract;
 import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
 import com.josecognizant.popmovies.domain.model.Movie;
-import com.josecognizant.popmovies.util.MovieJsonParserApiClient;
+//import com.josecognizant.popmovies.util.MovieJsonParserApiClient;
 import com.josecognizant.popmovies.util.MovieMapper;
 
 import org.json.JSONException;
@@ -185,9 +185,10 @@ public class MoviesDownloadService extends IntentService {
     }
 
     private List<ContentValues> parseFetchedData(String fetchedData) throws JSONException {
-        final List<Movie> moviesDataFromJson = MovieJsonParserApiClient
-                .getMoviesDataFromJson(fetchedData, mWayToOrderMovies);
-        return MovieMapper.mapToCV(moviesDataFromJson);
+//        final List<Movie> moviesDataFromJson = MovieJsonParserApiClient
+//                .getMoviesDataFromJson(fetchedData, mWayToOrderMovies);
+//        return MovieMapper.mapToCV(moviesDataFromJson);
+        return null;
     }
 
     private String readDataFromStream(InputStream input) throws IOException {
