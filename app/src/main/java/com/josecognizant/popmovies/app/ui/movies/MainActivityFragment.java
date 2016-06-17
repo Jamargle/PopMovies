@@ -17,19 +17,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.josecognizant.popmovies.R;
-import com.josecognizant.popmovies.data.local.MovieContract;
-import com.josecognizant.popmovies.service.MoviesDownloadService;
 import com.josecognizant.popmovies.app.ui.movies.adapter.MovieAdapter;
+import com.josecognizant.popmovies.data.local.MovieContract;
+import com.josecognizant.popmovies.presentation.movies.MoviesPresenter;
+import com.josecognizant.popmovies.presentation.movies.MoviesView;
+import com.josecognizant.popmovies.service.MoviesDownloadService;
 
 /**
  * Fragment that handle the view with the list of movies
  */
 public class MainActivityFragment extends Fragment
-        implements MovieAdapter.OnRecyclerViewClickListener,
+        implements MoviesView, MovieAdapter.OnRecyclerViewClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int MOVIE_LOADER = 0;
     private MovieAdapter mAdapter;
+    private MoviesPresenter mPresenter;
 
     public MainActivityFragment() {
     }
@@ -41,6 +44,8 @@ public class MainActivityFragment extends Fragment
         setHasOptionsMenu(true);
         initAdapter();
         initRecyclerView(rootView);
+        mPresenter = new MoviesPresenter();
+        mPresenter.onAttach(this);
         return rootView;
     }
 
@@ -54,6 +59,12 @@ public class MainActivityFragment extends Fragment
     public void onStart() {
         super.onStart();
         refreshMovies();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.onDetach();
     }
 
     private void initRecyclerView(View rootView) {
