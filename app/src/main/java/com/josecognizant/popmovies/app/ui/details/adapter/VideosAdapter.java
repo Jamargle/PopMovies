@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.util;
+package com.josecognizant.popmovies.app.ui.details.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
