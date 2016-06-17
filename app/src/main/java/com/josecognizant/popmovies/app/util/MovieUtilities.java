@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.util;
+package com.josecognizant.popmovies.app.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

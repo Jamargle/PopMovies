@@ -1,9 +1,11 @@
-package com.josecognizant.popmovies;
+package com.josecognizant.popmovies.app.ui.details;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.josecognizant.popmovies.R;
 
 /**
  * Activity with details of movies

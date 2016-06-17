@@ -9,7 +9,7 @@ import android.os.HandlerThread;
 import android.test.AndroidTestCase;
 
 import com.josecognizant.popmovies.data.local.MovieContract;
-import com.josecognizant.popmovies.util.MovieUtilities;
+import com.josecognizant.popmovies.app.util.MovieUtilities;
 import com.josecognizant.popmovies.utils.PollingCheck;
 
 import java.util.Map;

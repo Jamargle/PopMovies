@@ -3,7 +3,7 @@
     android:id="@+id/movie_grid_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.josecognizant.popmovies.ui.movie_grid.MainActivity"
+    tools:context=".app.ui.movies.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <android.support.v7.widget.RecyclerView

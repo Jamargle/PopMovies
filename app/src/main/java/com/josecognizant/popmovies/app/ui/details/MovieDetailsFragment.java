@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies;
+package com.josecognizant.popmovies.app.ui.details;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -20,12 +20,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.josecognizant.popmovies.BuildConfig;
+import com.josecognizant.popmovies.R;
 import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
 import com.josecognizant.popmovies.model.MovieVideos;
 import com.josecognizant.popmovies.model.Video;
 import com.josecognizant.popmovies.data.network.MovieDbClient;
-import com.josecognizant.popmovies.util.ServiceGenerator;
-import com.josecognizant.popmovies.util.VideosAdapter;
+import com.josecognizant.popmovies.app.util.ServiceGenerator;
+import com.josecognizant.popmovies.app.ui.details.adapter.VideosAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

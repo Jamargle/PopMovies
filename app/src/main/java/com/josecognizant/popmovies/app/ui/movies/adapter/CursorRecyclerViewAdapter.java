@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.util;
+package com.josecognizant.popmovies.app.ui.movies.adapter;
 
 import android.database.Cursor;
 import android.database.DataSetObserver;
