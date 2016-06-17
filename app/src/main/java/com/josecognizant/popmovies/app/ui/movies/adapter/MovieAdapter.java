@@ -1,5 +1,5 @@
-package com.josecognizant.popmovies.util;
-
+package com.josecognizant.popmovies.app.ui.movies.adapter;
+//TODO: Move this class to package movies
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
