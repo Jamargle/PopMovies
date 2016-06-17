@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.josecognizant.popmovies.R;
 import com.josecognizant.popmovies.app.ui.movies.adapter.MovieAdapter;
+import com.josecognizant.popmovies.app.util.MovieUtilities;
 import com.josecognizant.popmovies.data.local.MovieContract;
 import com.josecognizant.popmovies.presentation.movies.MoviesPresenter;
 import com.josecognizant.popmovies.presentation.movies.MoviesView;
@@ -116,29 +117,13 @@ public class MainActivityFragment extends Fragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = getMovieUriToQuery();
+        Uri uri = MovieUtilities.getMovieUriToQuery(getActivity());
         return new CursorLoader(getActivity(),
                 uri,
                 null,
                 null,
                 null,
                 null);
-    }
-
-    private Uri getMovieUriToQuery() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String wayToOrder = prefs.getString(
-                getString(R.string.pref_sorting_model_key),
-                getString(R.string.pref_sort_by_popular));
-        Uri uri = null;
-        if (wayToOrder.equals(getString(R.string.pref_sort_by_popular))) {
-            uri = MovieContract.MovieEntry.buildPopularMoviesUri();
-        } else if (wayToOrder.equals(getString(R.string.pref_sort_by_rating))) {
-            uri = MovieContract.MovieEntry.buildTopRatedMoviesUri();
-        } else if (wayToOrder.equals(getString(R.string.pref_show_favorite_movies))) {
-            uri = MovieContract.MovieEntry.buildFavoriteMoviesUri();
-        }
-        return uri;
     }
 
     @Override
