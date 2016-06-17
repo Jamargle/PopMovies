@@ -17,12 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.josecognizant.popmovies.R;
+import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
 import com.josecognizant.popmovies.app.ui.movies.adapter.MovieAdapter;
 import com.josecognizant.popmovies.app.util.MovieUtilities;
 import com.josecognizant.popmovies.data.local.MovieContract;
+import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.presentation.movies.MoviesPresenter;
 import com.josecognizant.popmovies.presentation.movies.MoviesView;
 import com.josecognizant.popmovies.service.MoviesDownloadService;
+
+import java.util.List;
 
 /**
  * Fragment that handle the view with the list of movies
@@ -45,8 +49,7 @@ public class MainActivityFragment extends Fragment
         setHasOptionsMenu(true);
         initAdapter();
         initRecyclerView(rootView);
-        mPresenter = new MoviesPresenter();
-        mPresenter.onAttach(this);
+        mPresenter = PresenterFactory.makeMoviesPresenter(this);
         return rootView;
     }
 
@@ -82,7 +85,8 @@ public class MainActivityFragment extends Fragment
     }
 
     private void refreshMovies() {
-        startRefreshMoviesFromInternetService();
+        mPresenter.onRefreshMovies();
+//        startRefreshMoviesFromInternetService();
     }
 
     private void startRefreshMoviesFromInternetService() {
