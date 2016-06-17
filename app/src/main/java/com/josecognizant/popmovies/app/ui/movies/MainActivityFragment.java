@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.ui.movie_grid;
+package com.josecognizant.popmovies.app.ui.movies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 import com.josecognizant.popmovies.R;
 import com.josecognizant.popmovies.data.local.MovieContract;
 import com.josecognizant.popmovies.service.MoviesDownloadService;
-import com.josecognizant.popmovies.util.MovieAdapter;
+import com.josecognizant.popmovies.app.util.MovieAdapter;
 
 /**
  * Fragment that handle the view with the list of movies

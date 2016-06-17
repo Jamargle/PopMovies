@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.ui.movie_grid;
+package com.josecognizant.popmovies.app.ui.movies;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,9 +9,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.josecognizant.popmovies.MovieDetailActivity;
+import com.josecognizant.popmovies.app.ui.details.MovieDetailActivity;
 import com.josecognizant.popmovies.R;
-import com.josecognizant.popmovies.ui.settings.SettingsActivity;
+import com.josecognizant.popmovies.app.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity
         implements MainActivityFragment.Callback {
