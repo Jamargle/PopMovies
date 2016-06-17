@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.ui.settings;
+package com.josecognizant.popmovies.app.ui.settings;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
