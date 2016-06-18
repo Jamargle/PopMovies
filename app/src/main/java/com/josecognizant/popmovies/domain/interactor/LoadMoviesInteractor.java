@@ -17,12 +17,15 @@ public class LoadMoviesInteractor
     private LocalMovieGateway localGateway;
     private NetworkMovieGateway networkGateway;
     private LoadMoviesInteractorOutput output;
+    private String moviesToShow;
 
 
-    public LoadMoviesInteractor(LocalMovieGateway localGateway, NetworkMovieGateway networkGateway) {
+    public LoadMoviesInteractor(LocalMovieGateway localGateway, NetworkMovieGateway networkGateway,
+                                String moviesToShow) {
         this.localGateway = localGateway;
         this.networkGateway = networkGateway;
         networkGateway.setMovieLoadListener(this);
+        this.moviesToShow = moviesToShow;
     }
 
     public void setOutput(LoadMoviesInteractorOutput output) {
@@ -58,7 +61,7 @@ public class LoadMoviesInteractor
         if (localGateway != null) {
             List<Movie> movies = localGateway.obtainMovies();
             if (movies.isEmpty() && networkGateway != null) {
-                networkGateway.refresh();
+                networkGateway.refresh(moviesToShow);
             } else {
                 output.onMoviesLoaded(movies);
             }
