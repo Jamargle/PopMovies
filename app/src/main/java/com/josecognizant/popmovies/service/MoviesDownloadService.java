@@ -10,9 +10,7 @@ import android.util.Log;
 import com.josecognizant.popmovies.BuildConfig;
 import com.josecognizant.popmovies.data.local.MovieContract;
 import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
-import com.josecognizant.popmovies.domain.model.Movie;
 //import com.josecognizant.popmovies.util.MovieJsonParserApiClient;
-import com.josecognizant.popmovies.util.MovieMapper;
 
 import org.json.JSONException;
 

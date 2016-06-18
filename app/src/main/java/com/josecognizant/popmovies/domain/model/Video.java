@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.model;
+package com.josecognizant.popmovies.domain.model;
 
 import com.google.gson.annotations.SerializedName;
 

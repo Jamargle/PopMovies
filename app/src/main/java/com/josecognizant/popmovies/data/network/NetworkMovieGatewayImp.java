@@ -57,14 +57,15 @@ public class NetworkMovieGatewayImp implements NetworkMovieGateway {
                             movies.add(movie);
                         }
                     }
-
                 }
 
                 @Override
                 public void onFailure(Call<MoviePage> call, Throwable t) {
+                    //TODO: create a listener
                 }
             });
         }
+        //TODO: create a listener
         return movies;
     }
 

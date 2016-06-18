@@ -1,29 +1,24 @@
 package com.josecognizant.popmovies.domain.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Class representing the Movie entity
  * Created by Jose on 24/05/2016.
  */
-public class Movie implements Parcelable {
-    public static final Parcelable.Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
+public class Movie {
 
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
+    @SerializedName("id")
     private int movieApiId;
+    @SerializedName("original_title")
     private String originalTitle;
+    @SerializedName("overview")
     private String overview;
+    @SerializedName("poster_path")
     private String thumbnailPosterPath;
+    @SerializedName("vote_average")
     private float voteAverage;
+    @SerializedName("release_date")
     private String releaseDate;
     private String orderType;
     private int favorite;
@@ -37,17 +32,6 @@ public class Movie implements Parcelable {
         this.releaseDate = builder.releaseDate;
         this.orderType = builder.orderType;
         this.favorite = builder.favorite;
-    }
-
-    protected Movie(Parcel in) {
-        movieApiId = in.readInt();
-        originalTitle = in.readString();
-        overview = in.readString();
-        thumbnailPosterPath = in.readString();
-        voteAverage = in.readFloat();
-        releaseDate = in.readString();
-        orderType = in.readString();
-        favorite = in.readInt();
     }
 
     public int getMovieApiId() {
@@ -92,23 +76,6 @@ public class Movie implements Parcelable {
         if (favorite == 0 || favorite == 1) {
             this.favorite = favorite;
         }
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(movieApiId);
-        dest.writeString(originalTitle);
-        dest.writeString(overview);
-        dest.writeString(thumbnailPosterPath);
-        dest.writeFloat(voteAverage);
-        dest.writeString(releaseDate);
-        dest.writeString(orderType);
-        dest.writeInt(favorite);
     }
 
     public static class Builder {

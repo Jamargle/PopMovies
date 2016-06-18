@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.josecognizant.popmovies.R;
-import com.josecognizant.popmovies.model.Video;
+import com.josecognizant.popmovies.domain.model.Video;
 
 import java.util.List;
 

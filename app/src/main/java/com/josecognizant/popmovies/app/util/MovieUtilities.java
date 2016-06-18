@@ -2,9 +2,11 @@ package com.josecognizant.popmovies.app.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import com.josecognizant.popmovies.R;
+import com.josecognizant.popmovies.data.local.MovieContract;
 
 /**
  * Class with some helper methods
@@ -23,6 +25,19 @@ public class MovieUtilities {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_sorting_model_key),
                 context.getString(R.string.pref_sort_by_popular));
+    }
+
+    public static Uri getMovieUriToQuery(Context context) {
+        String wayToOrder = getMovieOrderSetting(context);
+        Uri uri = null;
+        if (wayToOrder.equals(context.getString(R.string.pref_sort_by_popular))) {
+            uri = MovieContract.MovieEntry.buildPopularMoviesUri();
+        } else if (wayToOrder.equals(context.getString(R.string.pref_sort_by_rating))) {
+            uri = MovieContract.MovieEntry.buildTopRatedMoviesUri();
+        } else if (wayToOrder.equals(context.getString(R.string.pref_show_favorite_movies))) {
+            uri = MovieContract.MovieEntry.buildFavoriteMoviesUri();
+        }
+        return uri;
     }
 
     /**
