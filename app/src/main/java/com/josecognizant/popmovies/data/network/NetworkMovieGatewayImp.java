@@ -18,14 +18,21 @@ import retrofit2.Response;
  */
 public class NetworkMovieGatewayImp implements NetworkMovieGateway {
     private final MovieDbClient mMovieDbClient;
+    private NetworkMovieGateway.OnNetWorkGatewayListener listener;
 
     public NetworkMovieGatewayImp(MovieDbClient apiClient) {
         mMovieDbClient = apiClient;
     }
 
     @Override
-    public List<Movie> refresh() {
-        return refreshMoviesFromInternet();
+    public void setMovieLoadListener(OnNetWorkGatewayListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void refresh() {
+        List<Movie> movies = refreshMoviesFromInternet();
+        listener.onMoviesDownloaded(movies);
     }
 
     private List<Movie> refreshMoviesFromInternet() {
@@ -61,12 +68,11 @@ public class NetworkMovieGatewayImp implements NetworkMovieGateway {
 
                 @Override
                 public void onFailure(Call<MoviePage> call, Throwable t) {
-                    //TODO: create a listener
+                    listener.onErrorMoviesDownloaded();
                 }
             });
         }
-        //TODO: create a listener
+
         return movies;
     }
-
 }
