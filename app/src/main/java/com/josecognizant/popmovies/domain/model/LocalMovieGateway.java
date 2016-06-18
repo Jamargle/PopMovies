@@ -9,9 +9,9 @@ import java.util.List;
 public interface LocalMovieGateway {
     List<Movie> obtainMovies();
 
-    long persist(Movie movieToPersist);
+    void persist(List<Movie> moviesToPersist);
 
-    long update(List<Movie> moviesToUpdate);
+    long update(Movie movieToUpdate);
 
     void delete(Movie movieToDelete);
 }
