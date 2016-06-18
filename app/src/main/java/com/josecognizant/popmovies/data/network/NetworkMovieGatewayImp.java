@@ -1,7 +1,5 @@
 package com.josecognizant.popmovies.data.network;
 
-import android.util.Log;
-
 import com.josecognizant.popmovies.BuildConfig;
 import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.domain.model.MoviePage;
@@ -31,11 +29,24 @@ public class NetworkMovieGatewayImp implements NetworkMovieGateway {
     }
 
     private List<Movie> refreshMoviesFromInternet() {
-        final List<Movie> movies = new ArrayList<>();
-        if (mMovieDbClient != null) {
-            Call<MoviePage> call =
-                    mMovieDbClient.getListOfPopularMovies(BuildConfig.MOVIES_API_KEY);
+        List<Movie> movies = new ArrayList<>();
+        List<Movie> popularMovies, topRatedMovies;
 
+        popularMovies = performMovieCall(mMovieDbClient
+                .getListOfPopularMovies(BuildConfig.MOVIES_API_KEY));
+        topRatedMovies = performMovieCall(mMovieDbClient
+                .getListOfTopRatedMovies(BuildConfig.MOVIES_API_KEY));
+
+        movies.addAll(popularMovies);
+        movies.addAll(topRatedMovies);
+
+        return movies;
+    }
+
+    private List<Movie> performMovieCall(Call<MoviePage> call) {
+        final List<Movie> movies = new ArrayList<>();
+
+        if (mMovieDbClient != null && call != null) {
             call.enqueue(new Callback<MoviePage>() {
                 @Override
                 public void onResponse(Call<MoviePage> call, Response<MoviePage> response) {
@@ -44,7 +55,6 @@ public class NetworkMovieGatewayImp implements NetworkMovieGateway {
                     if (movieList != null) {
                         for (Movie movie : movieList) {
                             movies.add(movie);
-                            Log.d("NetworkGW", movie.getOriginalTitle() + " (" + movie.getOrderType() + ")");
                         }
                     }
 
@@ -52,10 +62,10 @@ public class NetworkMovieGatewayImp implements NetworkMovieGateway {
 
                 @Override
                 public void onFailure(Call<MoviePage> call, Throwable t) {
-                    Log.e("NetworkGW", "Error during download of movies");
                 }
             });
         }
         return movies;
     }
+
 }
