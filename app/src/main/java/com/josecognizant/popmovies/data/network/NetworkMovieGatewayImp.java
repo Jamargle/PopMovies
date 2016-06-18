@@ -1,6 +1,7 @@
 package com.josecognizant.popmovies.data.network;
 
 import com.josecognizant.popmovies.BuildConfig;
+import com.josecognizant.popmovies.data.local.MovieContract;
 import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.domain.model.MoviePage;
 import com.josecognizant.popmovies.domain.model.NetworkMovieGateway;
@@ -18,29 +19,30 @@ import retrofit2.Response;
  */
 public class NetworkMovieGatewayImp implements NetworkMovieGateway {
     private final MovieDbClient mMovieDbClient;
+    private NetworkMovieGateway.OnNetWorkGatewayListener listener;
 
     public NetworkMovieGatewayImp(MovieDbClient apiClient) {
         mMovieDbClient = apiClient;
     }
 
     @Override
-    public List<Movie> refresh() {
-        return refreshMoviesFromInternet();
+    public void setMovieLoadListener(OnNetWorkGatewayListener listener) {
+        this.listener = listener;
     }
 
-    private List<Movie> refreshMoviesFromInternet() {
-        List<Movie> movies = new ArrayList<>();
-        List<Movie> popularMovies, topRatedMovies;
+    @Override
+    public void refresh(String moviesToShow) {
+        refreshMoviesFromInternet(moviesToShow);
+    }
 
-        popularMovies = performMovieCall(mMovieDbClient
-                .getListOfPopularMovies(BuildConfig.MOVIES_API_KEY));
-        topRatedMovies = performMovieCall(mMovieDbClient
-                .getListOfTopRatedMovies(BuildConfig.MOVIES_API_KEY));
-
-        movies.addAll(popularMovies);
-        movies.addAll(topRatedMovies);
-
-        return movies;
+    private void refreshMoviesFromInternet(String moviesToShow) {
+        if (moviesToShow.equals(MovieContract.ORDER_BY_POPULAR)) {
+            performMovieCall(mMovieDbClient
+                    .getListOfPopularMovies(BuildConfig.MOVIES_API_KEY));
+        } else if (moviesToShow.equals(MovieContract.ORDER_BY_TOPRATED)) {
+            performMovieCall(mMovieDbClient
+                    .getListOfTopRatedMovies(BuildConfig.MOVIES_API_KEY));
+        }
     }
 
     private List<Movie> performMovieCall(Call<MoviePage> call) {
@@ -57,16 +59,16 @@ public class NetworkMovieGatewayImp implements NetworkMovieGateway {
                             movies.add(movie);
                         }
                     }
+                    listener.onMoviesDownloaded(movies);
                 }
 
                 @Override
                 public void onFailure(Call<MoviePage> call, Throwable t) {
-                    //TODO: create a listener
+                    listener.onErrorMoviesDownloaded();
                 }
             });
         }
-        //TODO: create a listener
+
         return movies;
     }
-
 }
