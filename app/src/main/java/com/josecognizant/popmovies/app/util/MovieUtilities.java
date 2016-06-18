@@ -18,17 +18,29 @@ public class MovieUtilities {
      * Returns the kind of order selected by the user to show movies
      *
      * @param context Context to access SharedPreferences
-     * @return String with the value of the setting established by the user to get movies in a
-     * specific order.
+     * @return String with the value of the setting established by the user to get movies from a
+     * specific classification using strings from MovieContract.
      */
     public static String getMovieOrderSetting(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString(context.getString(R.string.pref_sorting_model_key),
+        String wayToOrder = prefs.getString(context.getString(R.string.pref_sorting_model_key),
                 context.getString(R.string.pref_sort_by_popular));
+
+        if (wayToOrder.equals(context.getString(R.string.pref_sort_by_popular))) {
+            return MovieContract.ORDER_BY_POPULAR;
+        } else if (wayToOrder.equals(context.getString(R.string.pref_sort_by_rating))) {
+            return MovieContract.ORDER_BY_TOPRATED;
+        } else if (wayToOrder.equals(context.getString(R.string.pref_show_favorite_movies))) {
+            return MovieContract.FAVORITE_MOVIES;
+        } else {
+            return "";
+        }
     }
 
     public static Uri getMovieUriToQuery(Context context) {
-        String wayToOrder = getMovieOrderSetting(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String wayToOrder = prefs.getString(context.getString(R.string.pref_sorting_model_key),
+                context.getString(R.string.pref_sort_by_popular));
         Uri uri = null;
         if (wayToOrder.equals(context.getString(R.string.pref_sort_by_popular))) {
             uri = MovieContract.MovieEntry.buildPopularMoviesUri();

@@ -1,11 +1,9 @@
 package com.josecognizant.popmovies.app.ui.movies;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -91,22 +89,9 @@ public class MainActivityFragment extends Fragment
 
     private void startRefreshMoviesFromInternetService() {
         Intent intent = new Intent(getActivity(), MoviesDownloadService.class);
-        intent.putExtra(MoviesDownloadService.MOVIE_SELECTED_ORDER, getMoviesToShow());
+        intent.putExtra(MoviesDownloadService.MOVIE_SELECTED_ORDER, MovieUtilities.
+                getMovieOrderSetting(getActivity()));
         getActivity().startService(intent);
-    }
-
-    private String getMoviesToShow() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String wayToOrder = prefs.getString(
-                getString(R.string.pref_sorting_model_key),
-                getString(R.string.pref_sort_by_popular));
-        if (wayToOrder.equals(getString(R.string.pref_sort_by_popular))) {
-            return MovieContract.ORDER_BY_POPULAR;
-        } else if (wayToOrder.equals(getString(R.string.pref_sort_by_rating))) {
-            return MovieContract.ORDER_BY_TOPRATED;
-        } else {
-            return "";
-        }
     }
 
     @Override
