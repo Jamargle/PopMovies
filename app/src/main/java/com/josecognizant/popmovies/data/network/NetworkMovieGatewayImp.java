@@ -1,10 +1,13 @@
 package com.josecognizant.popmovies.data.network;
 
+import com.josecognizant.popmovies.BuildConfig;
 import com.josecognizant.popmovies.domain.model.Movie;
+import com.josecognizant.popmovies.domain.model.MoviePage;
 import com.josecognizant.popmovies.domain.model.NetworkMovieGateway;
 
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +17,35 @@ import java.util.List;
  */
 public class NetworkMovieGatewayImp implements NetworkMovieGateway {
 
-    private final MovieJsonParserApiClient mApiClient;
+
+    private final MovieDbClient mApiService;
+
+    public NetworkMovieGatewayImp(MovieDbClient apiService) {
+        mApiService = apiService;
+    }
+
+    @Override
+    public List<Movie> refresh() {
+        List<Movie> movies = new ArrayList<>();
+
+        MoviePage page;
+        try {
+            page = mApiService.getListOfPopularMovies(BuildConfig.APPLICATION_ID).execute().body();
+            if (page != null && page.getMovies() != null) {
+                for (Movie movie : page.getMovies()) {
+                    movies.add(movie);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return movies;
+    }
+
+
+
+
+    /*private final MovieJsonParserApiClient mApiClient;
 
     public NetworkMovieGatewayImp(MovieJsonParserApiClient apiClient) {
         mApiClient = apiClient;
@@ -34,5 +65,5 @@ public class NetworkMovieGatewayImp implements NetworkMovieGateway {
             }
         }
         return new ArrayList<>();
-    }
+    }*/
 }
