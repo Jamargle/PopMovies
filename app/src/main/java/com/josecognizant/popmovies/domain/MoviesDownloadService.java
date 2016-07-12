@@ -1,4 +1,5 @@
-package com.josecognizant.popmovies.service;
+package com.josecognizant.popmovies.domain;
+//TODO: remove this class
 
 import android.app.IntentService;
 import android.content.ContentValues;
