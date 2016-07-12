@@ -2,7 +2,9 @@
     <string name="app_name">PopMovies</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Movies list activity -->
     <string name="movie_list_image">This is a poster of a movie</string>
+    <string name="empty_movie_list">There is no movies to show</string>
 
     <!-- Settings strings-->
     <string name="title_activity_settings">Settings</string>

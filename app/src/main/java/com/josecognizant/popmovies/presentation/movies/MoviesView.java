@@ -15,5 +15,7 @@ public interface MoviesView {
 
     void showLoadMoviesError();
 
+    void hideMoviesError();
+
     void updateMoviesToShow(List<Movie> movies);
 }

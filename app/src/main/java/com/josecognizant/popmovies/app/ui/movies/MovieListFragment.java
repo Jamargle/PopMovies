@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.josecognizant.popmovies.R;
 import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
@@ -24,6 +26,9 @@ import com.josecognizant.popmovies.presentation.movies.MoviesView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Fragment that handle the view with the list of movies
  */
@@ -32,6 +37,12 @@ public class MovieListFragment extends Fragment
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int MOVIE_LOADER = 0;
+
+    @BindView(R.id.movies_loading)
+    ProgressBar mLoading;
+    @BindView(R.id.empty_list)
+    TextView mErrorsText;
+
     private MovieAdapter mAdapter;
     private MoviesPresenter mPresenter;
 
@@ -46,6 +57,7 @@ public class MovieListFragment extends Fragment
         initAdapter();
         initRecyclerView(rootView);
         mPresenter = PresenterFactory.makeMoviesPresenter(this, getActivity());
+        ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -100,17 +112,43 @@ public class MovieListFragment extends Fragment
 
     @Override
     public void showLoading() {
-        throw new UnsupportedOperationException();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mLoading.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
     public void hideLoading() {
-        throw new UnsupportedOperationException();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mLoading.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
     public void showLoadMoviesError() {
-        throw new UnsupportedOperationException();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mErrorsText.setText(getString(R.string.empty_movie_list));
+                mErrorsText.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    @Override
+    public void hideMoviesError() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mErrorsText.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
