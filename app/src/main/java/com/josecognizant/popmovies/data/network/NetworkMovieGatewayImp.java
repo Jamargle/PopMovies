@@ -1,28 +1,50 @@
 package com.josecognizant.popmovies.data.network;
 
-import android.util.Log;
-
 import com.josecognizant.popmovies.BuildConfig;
 import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.domain.model.MoviePage;
 import com.josecognizant.popmovies.domain.model.NetworkMovieGateway;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Implementation of a NetworkGateway for download resources from the Moviedb API
  * Created by Jose on 24/05/2016.
  */
 public class NetworkMovieGatewayImp implements NetworkMovieGateway {
-    private final MovieDbClient mMovieDbClient;
+    private final MovieDbClient mApiService;
 
-    public NetworkMovieGatewayImp(MovieDbClient apiClient) {
-        mMovieDbClient = apiClient;
+    public NetworkMovieGatewayImp(MovieDbClient apiService) {
+        mApiService = apiService;
+    }
+
+    @Override
+    public List<Movie> refresh() {
+        List<Movie> movies = new ArrayList<>();
+
+        MoviePage page;
+        try {
+            page = mApiService.getListOfPopularMovies(BuildConfig.APPLICATION_ID).execute().body();
+            if (page != null && page.getMovies() != null) {
+                for (Movie movie : page.getMovies()) {
+                    movies.add(movie);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return movies;
+    }
+
+
+
+
+    /*private final MovieJsonParserApiClient mApiClient;
+
+    public NetworkMovieGatewayImp(MovieJsonParserApiClient apiClient) {
+        mApiClient = apiClient;
     }
 
     @Override
@@ -56,6 +78,6 @@ public class NetworkMovieGatewayImp implements NetworkMovieGateway {
                 }
             });
         }
-        return movies;
-    }
+        return new ArrayList<>();
+    }*/
 }
