@@ -28,20 +28,21 @@ public class NetworkMovieGatewayImp implements NetworkMovieGateway {
     @Override
     public List<Movie> obtainMovies() {
         Call<MoviePage> call = mApiService.getListOfPopularMovies(BuildConfig.MOVIES_API_KEY);
-        addMoviesToList(call);
+        addMoviesToList(call, MovieContract.ORDER_BY_POPULAR);
 
         call = mApiService.getListOfTopRatedMovies(BuildConfig.MOVIES_API_KEY);
-        addMoviesToList(call);
+        addMoviesToList(call, MovieContract.ORDER_BY_TOPRATED);
 
         return mMovies;
     }
 
-    private void addMoviesToList(Call<MoviePage> call) {
+    private void addMoviesToList(Call<MoviePage> call, String wayToOrder) {
         MoviePage page;
         try {
             page = call.execute().body();
             if (page != null && page.getMovies() != null) {
                 for (Movie movie : page.getMovies()) {
+                    movie.setOrderType(wayToOrder);
                     mMovies.add(movie);
                 }
             }
