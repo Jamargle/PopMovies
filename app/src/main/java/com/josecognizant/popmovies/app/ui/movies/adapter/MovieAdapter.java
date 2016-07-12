@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Custom Adapter for RecyclerView in MainActivityFragment
+ * Custom Adapter for RecyclerView in MovieListFragment
  * Created by Jose on 05/06/2016.
  */
 public class MovieAdapter extends CursorRecyclerViewAdapter<MovieAdapter.MovieViewHolder> {

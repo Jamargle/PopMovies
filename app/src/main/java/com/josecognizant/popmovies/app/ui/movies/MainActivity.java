@@ -9,12 +9,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.josecognizant.popmovies.app.ui.details.MovieDetailActivity;
 import com.josecognizant.popmovies.R;
+import com.josecognizant.popmovies.app.ui.details.MovieDetailActivity;
 import com.josecognizant.popmovies.app.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity
-        implements MainActivityFragment.Callback {
+        implements MovieListFragment.Callback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

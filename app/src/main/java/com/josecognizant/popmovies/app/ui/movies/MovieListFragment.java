@@ -1,6 +1,5 @@
 package com.josecognizant.popmovies.app.ui.movies;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,14 +21,13 @@ import com.josecognizant.popmovies.data.local.MovieContract;
 import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.presentation.movies.MoviesPresenter;
 import com.josecognizant.popmovies.presentation.movies.MoviesView;
-import com.josecognizant.popmovies.service.MoviesDownloadService;
 
 import java.util.List;
 
 /**
  * Fragment that handle the view with the list of movies
  */
-public class MainActivityFragment extends Fragment
+public class MovieListFragment extends Fragment
         implements MoviesView, MovieAdapter.OnRecyclerViewClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -37,7 +35,7 @@ public class MainActivityFragment extends Fragment
     private MovieAdapter mAdapter;
     private MoviesPresenter mPresenter;
 
-    public MainActivityFragment() {
+    public MovieListFragment() {
     }
 
     @Override
@@ -60,38 +58,13 @@ public class MainActivityFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        refreshMovies();
+        mPresenter.refreshMovies();
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDetach() {
+        super.onDetach();
         mPresenter.onDetach();
-    }
-
-    private void initRecyclerView(View rootView) {
-        RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_movie_list);
-        mRecyclerView.setHasFixedSize(true);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
-        mRecyclerView.setLayoutManager(gridLayoutManager);
-
-        mRecyclerView.setAdapter(mAdapter);
-    }
-
-    private void initAdapter() {
-        mAdapter = new MovieAdapter(getActivity(), null, this);
-    }
-
-    private void refreshMovies() {
-        mPresenter.onRefreshMovies();
-//        startRefreshMoviesFromInternetService();
-    }
-
-    private void startRefreshMoviesFromInternetService() {
-        Intent intent = new Intent(getActivity(), MoviesDownloadService.class);
-        intent.putExtra(MoviesDownloadService.MOVIE_SELECTED_ORDER, MovieUtilities.
-                getMovieOrderSetting(getActivity()));
-        getActivity().startService(intent);
     }
 
     @Override
@@ -127,22 +100,35 @@ public class MainActivityFragment extends Fragment
 
     @Override
     public void showLoading() {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void hideLoading() {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void showLoadMoviesError() {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void updateMoviesToShow(List<Movie> movies) {
+        throw new UnsupportedOperationException();
+    }
 
+    private void initAdapter() {
+        mAdapter = new MovieAdapter(getActivity(), null, this);
+    }
+
+    private void initRecyclerView(View rootView) {
+        RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.movies_grid_recyclerview);
+        mRecyclerView.setHasFixedSize(true);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     /**
@@ -150,7 +136,7 @@ public class MainActivityFragment extends Fragment
      * implement. This mechanism allows activities to be notified of item
      * selections.
      */
-    public interface Callback {
+    interface Callback {
         void onItemSelected(Uri dateUri);
     }
 }
