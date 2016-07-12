@@ -5,6 +5,7 @@ import android.content.Context;
 import com.josecognizant.popmovies.presentation.InteractorExecutor;
 import com.josecognizant.popmovies.presentation.InteractorExecutorImp;
 import com.josecognizant.popmovies.presentation.movies.MoviesPresenter;
+import com.josecognizant.popmovies.presentation.movies.MoviesPresenterImp;
 import com.josecognizant.popmovies.presentation.movies.MoviesView;
 
 import java.util.concurrent.Executors;
@@ -15,7 +16,7 @@ import java.util.concurrent.Executors;
  */
 public class PresenterFactory {
     public static MoviesPresenter makeMoviesPresenter(MoviesView view, Context context) {
-        return new MoviesPresenter(view,
+        return new MoviesPresenterImp(view,
                 InteractorFactory.makeLoadMoviesInteractor(context),
                 makeInteractorExecutor());
     }
