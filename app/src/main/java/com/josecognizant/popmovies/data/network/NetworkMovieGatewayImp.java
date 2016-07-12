@@ -6,69 +6,47 @@ import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.domain.model.MoviePage;
 import com.josecognizant.popmovies.domain.model.NetworkMovieGateway;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Implementation of a NetworkGateway for download resources from the Moviedb API
  * Created by Jose on 24/05/2016.
  */
 public class NetworkMovieGatewayImp implements NetworkMovieGateway {
-    private final MovieDbClient mMovieDbClient;
-    private NetworkMovieGateway.OnNetWorkGatewayListener listener;
+    private final MovieDbClient mApiService;
+    private final List<Movie> mMovies;
 
-    public NetworkMovieGatewayImp(MovieDbClient apiClient) {
-        mMovieDbClient = apiClient;
+    public NetworkMovieGatewayImp(MovieDbClient apiService) {
+        mApiService = apiService;
+        mMovies = new ArrayList<>();
     }
 
     @Override
-    public void setMovieLoadListener(OnNetWorkGatewayListener listener) {
-        this.listener = listener;
+    public List<Movie> obtainMovies() {
+        Call<MoviePage> call = mApiService.getListOfPopularMovies(BuildConfig.MOVIES_API_KEY);
+        addMoviesToList(call);
+
+        call = mApiService.getListOfTopRatedMovies(BuildConfig.MOVIES_API_KEY);
+        addMoviesToList(call);
+
+        return mMovies;
     }
 
-    @Override
-    public void refresh(String moviesToShow) {
-        refreshMoviesFromInternet(moviesToShow);
-    }
-
-    private void refreshMoviesFromInternet(String moviesToShow) {
-        if (moviesToShow.equals(MovieContract.ORDER_BY_POPULAR)) {
-            performMovieCall(mMovieDbClient
-                    .getListOfPopularMovies(BuildConfig.MOVIES_API_KEY));
-        } else if (moviesToShow.equals(MovieContract.ORDER_BY_TOPRATED)) {
-            performMovieCall(mMovieDbClient
-                    .getListOfTopRatedMovies(BuildConfig.MOVIES_API_KEY));
-        }
-    }
-
-    private List<Movie> performMovieCall(Call<MoviePage> call) {
-        final List<Movie> movies = new ArrayList<>();
-
-        if (mMovieDbClient != null && call != null) {
-            call.enqueue(new Callback<MoviePage>() {
-                @Override
-                public void onResponse(Call<MoviePage> call, Response<MoviePage> response) {
-                    MoviePage page = response.body();
-                    List<Movie> movieList = page.getMovies();
-                    if (movieList != null) {
-                        for (Movie movie : movieList) {
-                            movies.add(movie);
-                        }
-                    }
-                    listener.onMoviesDownloaded(movies);
+    private void addMoviesToList(Call<MoviePage> call) {
+        MoviePage page;
+        try {
+            page = call.execute().body();
+            if (page != null && page.getMovies() != null) {
+                for (Movie movie : page.getMovies()) {
+                    mMovies.add(movie);
                 }
-
-                @Override
-                public void onFailure(Call<MoviePage> call, Throwable t) {
-                    listener.onErrorMoviesDownloaded();
-                }
-            });
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        return movies;
     }
 }
