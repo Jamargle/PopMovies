@@ -17,19 +17,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.josecognizant.popmovies.R;
-import com.josecognizant.popmovies.data.local.MovieContract;
-import com.josecognizant.popmovies.service.MoviesDownloadService;
+import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
 import com.josecognizant.popmovies.app.ui.movies.adapter.MovieAdapter;
+import com.josecognizant.popmovies.app.util.MovieUtilities;
+import com.josecognizant.popmovies.data.local.MovieContract;
+import com.josecognizant.popmovies.domain.model.Movie;
+import com.josecognizant.popmovies.presentation.movies.MoviesPresenter;
+import com.josecognizant.popmovies.presentation.movies.MoviesView;
+import com.josecognizant.popmovies.service.MoviesDownloadService;
+
+import java.util.List;
 
 /**
  * Fragment that handle the view with the list of movies
  */
 public class MainActivityFragment extends Fragment
-        implements MovieAdapter.OnRecyclerViewClickListener,
+        implements MoviesView, MovieAdapter.OnRecyclerViewClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int MOVIE_LOADER = 0;
     private MovieAdapter mAdapter;
+    private MoviesPresenter mPresenter;
 
     public MainActivityFragment() {
     }
@@ -41,6 +49,7 @@ public class MainActivityFragment extends Fragment
         setHasOptionsMenu(true);
         initAdapter();
         initRecyclerView(rootView);
+        mPresenter = PresenterFactory.makeMoviesPresenter(this);
         return rootView;
     }
 
@@ -54,6 +63,12 @@ public class MainActivityFragment extends Fragment
     public void onStart() {
         super.onStart();
         refreshMovies();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.onDetach();
     }
 
     private void initRecyclerView(View rootView) {
@@ -70,7 +85,8 @@ public class MainActivityFragment extends Fragment
     }
 
     private void refreshMovies() {
-        startRefreshMoviesFromInternetService();
+        mPresenter.onRefreshMovies();
+//        startRefreshMoviesFromInternetService();
     }
 
     private void startRefreshMoviesFromInternetService() {
@@ -105,29 +121,13 @@ public class MainActivityFragment extends Fragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = getMovieUriToQuery();
+        Uri uri = MovieUtilities.getMovieUriToQuery(getActivity());
         return new CursorLoader(getActivity(),
                 uri,
                 null,
                 null,
                 null,
                 null);
-    }
-
-    private Uri getMovieUriToQuery() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String wayToOrder = prefs.getString(
-                getString(R.string.pref_sorting_model_key),
-                getString(R.string.pref_sort_by_popular));
-        Uri uri = null;
-        if (wayToOrder.equals(getString(R.string.pref_sort_by_popular))) {
-            uri = MovieContract.MovieEntry.buildPopularMoviesUri();
-        } else if (wayToOrder.equals(getString(R.string.pref_sort_by_rating))) {
-            uri = MovieContract.MovieEntry.buildTopRatedMoviesUri();
-        } else if (wayToOrder.equals(getString(R.string.pref_show_favorite_movies))) {
-            uri = MovieContract.MovieEntry.buildFavoriteMoviesUri();
-        }
-        return uri;
     }
 
     @Override
