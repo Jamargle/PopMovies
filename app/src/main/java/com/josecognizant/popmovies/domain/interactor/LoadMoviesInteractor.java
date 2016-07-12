@@ -37,15 +37,14 @@ public class LoadMoviesInteractor implements Interactor {
     }
 
     private void loadMovies() {
+        List<Movie> movieList;
         if (localGateway != null) {
-            List<Movie> movies = localGateway.obtainMovies();
-            if (movies.isEmpty() && networkGateway != null) {
-                movies = networkGateway.refresh();
-                output.onMoviesLoaded(movies);
-                localGateway.update(movies);
-            } else {
-                output.onMoviesLoaded(movies);
+            movieList = localGateway.obtainMovies();
+            if (movieList.isEmpty() && networkGateway != null) {
+                movieList = networkGateway.obtainMovies();
+                localGateway.update(movieList);
             }
+            output.onMoviesLoaded(movieList);
         }
     }
 

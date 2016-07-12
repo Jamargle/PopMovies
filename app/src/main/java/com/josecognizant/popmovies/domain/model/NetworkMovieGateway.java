@@ -7,5 +7,5 @@ import java.util.List;
  * Created by Jose on 24/05/2016.
  */
 public interface NetworkMovieGateway {
-    List<Movie> refresh();
+    List<Movie> obtainMovies();
 }
