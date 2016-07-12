@@ -9,75 +9,43 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+
 /**
  * Implementation of a NetworkGateway for download resources from the Moviedb API
  * Created by Jose on 24/05/2016.
  */
 public class NetworkMovieGatewayImp implements NetworkMovieGateway {
     private final MovieDbClient mApiService;
+    private final List<Movie> mMovies;
 
     public NetworkMovieGatewayImp(MovieDbClient apiService) {
         mApiService = apiService;
+        mMovies = new ArrayList<>();
     }
 
     @Override
-    public List<Movie> refresh() {
-        List<Movie> movies = new ArrayList<>();
+    public List<Movie> obtainMovies() {
+        Call<MoviePage> call = mApiService.getListOfPopularMovies(BuildConfig.MOVIES_API_KEY);
+        addMoviesToList(call);
 
+        call = mApiService.getListOfTopRatedMovies(BuildConfig.MOVIES_API_KEY);
+        addMoviesToList(call);
+
+        return mMovies;
+    }
+
+    private void addMoviesToList(Call<MoviePage> call) {
         MoviePage page;
         try {
-            page = mApiService.getListOfPopularMovies(BuildConfig.APPLICATION_ID).execute().body();
+            page = call.execute().body();
             if (page != null && page.getMovies() != null) {
                 for (Movie movie : page.getMovies()) {
-                    movies.add(movie);
+                    mMovies.add(movie);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return movies;
     }
-
-
-
-
-    /*private final MovieJsonParserApiClient mApiClient;
-
-    public NetworkMovieGatewayImp(MovieJsonParserApiClient apiClient) {
-        mApiClient = apiClient;
-    }
-
-    @Override
-    public List<Movie> refresh() {
-        return refreshMoviesFromInternet();
-    }
-
-    private List<Movie> refreshMoviesFromInternet() {
-        final List<Movie> movies = new ArrayList<>();
-        if (mMovieDbClient != null) {
-            Call<MoviePage> call =
-                    mMovieDbClient.getListOfPopularMovies(BuildConfig.MOVIES_API_KEY);
-
-            call.enqueue(new Callback<MoviePage>() {
-                @Override
-                public void onResponse(Call<MoviePage> call, Response<MoviePage> response) {
-                    MoviePage page = response.body();
-                    List<Movie> movieList = page.getMovies();
-                    if (movieList != null) {
-                        for (Movie movie : movieList) {
-                            movies.add(movie);
-                            Log.d("NetworkGW", movie.getOriginalTitle() + " (" + movie.getOrderType() + ")");
-                        }
-                    }
-
-                }
-
-                @Override
-                public void onFailure(Call<MoviePage> call, Throwable t) {
-                    Log.e("NetworkGW", "Error during download of movies");
-                }
-            });
-        }
-        return new ArrayList<>();
-    }*/
 }
