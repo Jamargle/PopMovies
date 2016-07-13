@@ -42,6 +42,7 @@ public class MovieMapper {
     public static Movie mapToMovie(ContentValues movieValues) {
         if (movieValues != null) {
             return new Movie.Builder()
+                    .movieDbId(movieValues.getAsLong(MovieEntry._ID))
                     .movieApiId(movieValues.getAsInteger(MovieEntry.COLUMN_MOVIE_ID))
                     .originalTitle(movieValues.getAsString(MovieEntry.COLUMN_TITLE))
                     .thumbnailPosterPath(movieValues.getAsString(MovieEntry.COLUMN_POSTER))
@@ -82,6 +83,7 @@ public class MovieMapper {
     private static Movie mapToMovie(Cursor movieCursor) {
         if (movieCursor != null) {
             return new Movie.Builder()
+                    .movieDbId(movieCursor.getLong(movieCursor.getColumnIndex(MovieEntry._ID)))
                     .movieApiId(movieCursor.getInt(movieCursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID)))
                     .originalTitle(movieCursor.getString(movieCursor.getColumnIndex(MovieEntry.COLUMN_TITLE)))
                     .thumbnailPosterPath(movieCursor.getString(movieCursor.getColumnIndex(MovieEntry.COLUMN_POSTER)))

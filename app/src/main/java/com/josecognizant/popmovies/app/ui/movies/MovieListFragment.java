@@ -1,5 +1,6 @@
 package com.josecognizant.popmovies.app.ui.movies;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,6 +15,7 @@ import com.josecognizant.popmovies.R;
 import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
 import com.josecognizant.popmovies.app.ui.movies.adapter.MovieListAdapter;
 import com.josecognizant.popmovies.app.util.MovieUtilities;
+import com.josecognizant.popmovies.data.local.MovieContract;
 import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.presentation.movies.MoviesPresenter;
 import com.josecognizant.popmovies.presentation.movies.MoviesView;
@@ -137,10 +139,11 @@ public class MovieListFragment extends Fragment
     }
 
     private void startMovieDetailsActivity(Movie movie) {
-        ((Callback) getActivity()).onItemSelected(movie);
+        ((Callback) getActivity()).onItemSelected(MovieContract.MovieEntry.buildMovieUri(
+                movie.getMovieDbId()));
     }
 
     interface Callback {
-        void onItemSelected(Movie movie);
+        void onItemSelected(Uri movieUri);
     }
 }

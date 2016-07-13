@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemSelected(Uri dateUri) {
-        showMovieDetails(dateUri);
+    public void onItemSelected(Uri movieUri) {
+        showMovieDetails(movieUri);
     }
 
     private void showMovieDetails(Uri uri) {
