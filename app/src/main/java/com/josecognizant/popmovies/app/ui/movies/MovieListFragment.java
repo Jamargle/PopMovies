@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.josecognizant.popmovies.R;
 import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
 import com.josecognizant.popmovies.app.ui.movies.adapter.MovieListAdapter;
+import com.josecognizant.popmovies.app.util.MovieUtilities;
 import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.presentation.movies.MoviesPresenter;
 import com.josecognizant.popmovies.presentation.movies.MoviesView;
@@ -118,7 +119,7 @@ public class MovieListFragment extends Fragment
 
     @Override
     public void updateMoviesToShow(List<Movie> movies) {
-        mMovieList = movies;
+        mMovieList = MovieUtilities.filterMoviesToShow(movies, getActivity());
         mAdapter.changeDataSet(mMovieList);
     }
 

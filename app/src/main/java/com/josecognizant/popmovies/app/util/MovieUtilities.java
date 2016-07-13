@@ -2,11 +2,14 @@ package com.josecognizant.popmovies.app.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import com.josecognizant.popmovies.R;
 import com.josecognizant.popmovies.data.local.MovieContract;
+import com.josecognizant.popmovies.domain.model.Movie;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class with some helper methods
@@ -37,21 +40,6 @@ public abstract class MovieUtilities {
         }
     }
 
-    public static Uri getMovieUriToQuery(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String wayToOrder = prefs.getString(context.getString(R.string.pref_sorting_model_key),
-                context.getString(R.string.pref_sort_by_popular));
-        Uri uri = null;
-        if (wayToOrder.equals(context.getString(R.string.pref_sort_by_popular))) {
-            uri = MovieContract.MovieEntry.buildPopularMoviesUri();
-        } else if (wayToOrder.equals(context.getString(R.string.pref_sort_by_rating))) {
-            uri = MovieContract.MovieEntry.buildTopRatedMoviesUri();
-        } else if (wayToOrder.equals(context.getString(R.string.pref_show_favorite_movies))) {
-            uri = MovieContract.MovieEntry.buildFavoriteMoviesUri();
-        }
-        return uri;
-    }
-
     /**
      * Check if the stored value of favourite column is true or false
      *
@@ -60,5 +48,17 @@ public abstract class MovieUtilities {
      */
     public static boolean isFavourite(int value) {
         return value == 1;
+    }
+
+    public static List<Movie> filterMoviesToShow(List<Movie> movies, Context context) {
+        List<Movie> moviesToShow = new ArrayList<>();
+        final String movieOrderSetting = getMovieOrderSetting(context);
+
+        for (Movie movie : movies) {
+            if (movieOrderSetting.equals(movie.getOrderType())) {
+                moviesToShow.add(movie);
+            }
+        }
+        return moviesToShow;
     }
 }
