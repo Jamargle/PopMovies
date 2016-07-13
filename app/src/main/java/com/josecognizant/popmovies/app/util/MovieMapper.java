@@ -1,6 +1,7 @@
 package com.josecognizant.popmovies.app.util;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
 import com.josecognizant.popmovies.domain.model.Movie;
@@ -62,5 +63,35 @@ public class MovieMapper {
             }
         }
         return movieList;
+    }
+
+    public static List<Movie> mapToListOfMovies(Cursor moviesCursor) {
+        List<Movie> movieList = new ArrayList<>();
+        if (moviesCursor != null && moviesCursor.moveToFirst()) {
+            Movie movie;
+            while (moviesCursor.moveToNext()) {
+                movie = mapToMovie(moviesCursor);
+                if (movie != null) {
+                    movieList.add(movie);
+                }
+            }
+        }
+        return movieList;
+    }
+
+    private static Movie mapToMovie(Cursor movieCursor) {
+        if (movieCursor != null) {
+            return new Movie.Builder()
+                    .movieApiId(movieCursor.getInt(movieCursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID)))
+                    .originalTitle(movieCursor.getString(movieCursor.getColumnIndex(MovieEntry.COLUMN_TITLE)))
+                    .thumbnailPosterPath(movieCursor.getString(movieCursor.getColumnIndex(MovieEntry.COLUMN_POSTER)))
+                    .overview(movieCursor.getString(movieCursor.getColumnIndex(MovieEntry.COLUMN_OVERVIEW)))
+                    .voteAverage(movieCursor.getFloat(movieCursor.getColumnIndex(MovieEntry.COLUMN_VOTE_AVERAGE)))
+                    .releaseDate(movieCursor.getString(movieCursor.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE)))
+                    .orderType(movieCursor.getString(movieCursor.getColumnIndex(MovieEntry.COLUMN_ORDER_TYPE)))
+                    .favorite(movieCursor.getInt(movieCursor.getColumnIndex(MovieEntry.COLUMN_POSTER)))
+                    .build();
+        }
+        return null;
     }
 }
