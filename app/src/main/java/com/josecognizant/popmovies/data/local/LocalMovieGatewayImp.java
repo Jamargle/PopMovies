@@ -26,7 +26,13 @@ public class LocalMovieGatewayImp implements LocalMovieGateway {
 
     @Override
     public List<Movie> obtainMovies() {
-        return new ArrayList<>();
+        List<Movie> movieList = new ArrayList<>();
+        final Cursor cursor = contentResolver.query(MovieEntry.CONTENT_URI, null, null, null, null);
+        if (cursor != null) {
+            movieList = MovieMapper.mapToListOfMovies(cursor);
+            cursor.close();
+        }
+        return movieList;
     }
 
     @Override
