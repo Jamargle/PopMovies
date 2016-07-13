@@ -8,6 +8,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Movie {
 
+    private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
+    private static final String IMAGE_MEDIUM_SIZE = "/w185";
+
     @SerializedName("id")
     private int movieApiId;
     @SerializedName("original_title")
@@ -104,7 +107,11 @@ public class Movie {
         }
 
         public Builder thumbnailPosterPath(String path) {
-            this.thumbnailPosterPath = path;
+            if (!path.contains(BASE_IMAGE_URL)) {
+                this.thumbnailPosterPath = BASE_IMAGE_URL + IMAGE_MEDIUM_SIZE + path;
+            } else {
+                this.thumbnailPosterPath = path;
+            }
             return this;
         }
 
