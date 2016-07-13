@@ -12,7 +12,7 @@ import com.josecognizant.popmovies.data.local.MovieContract;
  * Class with some helper methods
  * Created by Jose on 03/06/2016.
  */
-public class MovieUtilities {
+public abstract class MovieUtilities {
 
     /**
      * Returns the kind of order selected by the user to show movies
