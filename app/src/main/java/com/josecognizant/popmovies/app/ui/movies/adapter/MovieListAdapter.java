@@ -1,6 +1,8 @@
 package com.josecognizant.popmovies.app.ui.movies.adapter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,10 +55,15 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         return mMovieDataSet.size();
     }
 
-    public void changeDataSet(List<Movie> newDataSet) {
+    public void changeDataSet(final List<Movie> newDataSet) {
         if (newDataSet != null) {
-            mMovieDataSet = newDataSet;
-            notifyDataSetChanged();
+            Handler refresh = new Handler(Looper.getMainLooper());
+            refresh.post(new Runnable() {
+                public void run() {
+                    mMovieDataSet = newDataSet;
+                    notifyDataSetChanged();
+                }
+            });
         }
     }
 
