@@ -37,7 +37,6 @@ public class LocalMovieGatewayImp implements LocalMovieGateway {
                 if (movieIDInDB(movie) > 0) {
                     // Remove the favorite field to keep the existing value
                     movie.remove(MovieEntry.COLUMN_FAVORITE);
-                    movie.remove(MovieEntry.COLUMN_ORDER_TYPE);
                     contentResolver.update(
                             MovieEntry.CONTENT_URI,
                             movie,
