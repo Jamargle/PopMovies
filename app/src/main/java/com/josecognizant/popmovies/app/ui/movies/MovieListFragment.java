@@ -135,7 +135,7 @@ public class MovieListFragment extends Fragment
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mErrorsText.setText(getString(R.string.empty_movie_list));
+                mErrorsText.setText(getString(R.string.error_load_movie_list));
                 mErrorsText.setVisibility(View.VISIBLE);
             }
         });
