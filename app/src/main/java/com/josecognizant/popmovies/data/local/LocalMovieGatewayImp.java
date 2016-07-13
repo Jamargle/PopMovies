@@ -26,8 +26,7 @@ public class LocalMovieGatewayImp implements LocalMovieGateway {
 
     @Override
     public List<Movie> obtainMovies() {
-        List<Movie> movieList = new ArrayList<>();
-        return movieList;
+        return new ArrayList<>();
     }
 
     @Override
