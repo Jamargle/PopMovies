@@ -11,6 +11,8 @@ public class Movie {
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_MEDIUM_SIZE = "/w185";
 
+    private long movieDbId;
+
     @SerializedName("id")
     private int movieApiId;
     @SerializedName("original_title")
@@ -27,6 +29,7 @@ public class Movie {
     private int favorite;
 
     Movie(Builder builder) {
+        this.movieDbId = builder.movieDbId;
         this.movieApiId = builder.movieApiId;
         this.originalTitle = builder.originalTitle;
         this.overview = builder.overview;
@@ -35,6 +38,10 @@ public class Movie {
         this.releaseDate = builder.releaseDate;
         this.orderType = builder.orderType;
         this.favorite = builder.favorite;
+    }
+
+    public long getMovieDbId() {
+        return movieDbId;
     }
 
     public int getMovieApiId() {
@@ -82,6 +89,7 @@ public class Movie {
     }
 
     public static class Builder {
+        private long movieDbId;
         private int movieApiId;
         private String originalTitle;
         private String overview;
@@ -90,6 +98,11 @@ public class Movie {
         private String releaseDate;
         private String orderType;
         private int favorite;
+
+        public Builder movieDbId(long movieDbId) {
+            this.movieDbId = movieDbId;
+            return this;
+        }
 
         public Builder movieApiId(int movieApiId) {
             this.movieApiId = movieApiId;
