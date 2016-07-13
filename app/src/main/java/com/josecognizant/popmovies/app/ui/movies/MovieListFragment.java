@@ -119,6 +119,7 @@ public class MovieListFragment extends Fragment
     @Override
     public void updateMoviesToShow(List<Movie> movies) {
         mMovieList = movies;
+        mAdapter.changeDataSet(mMovieList);
     }
 
     private void initAdapter() {
