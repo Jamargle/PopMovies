@@ -7,4 +7,6 @@ package com.josecognizant.popmovies.presentation.details;
 public interface DetailPresenter {
 
     void loadMovie();
+
+    void saveMovieCurrentState();
 }
