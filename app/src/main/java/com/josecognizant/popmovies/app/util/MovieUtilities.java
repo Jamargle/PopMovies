@@ -1,7 +1,10 @@
 package com.josecognizant.popmovies.app.util;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import com.josecognizant.popmovies.R;
@@ -60,5 +63,16 @@ public abstract class MovieUtilities {
             }
         }
         return moviesToShow;
+    }
+
+    public static Movie getMovieFromUri(ContentResolver contentResolver, Uri uri) {
+        final Cursor movieQuery = contentResolver.query(uri, null, null, null, null);
+        if (movieQuery != null) {
+            if (movieQuery.moveToFirst()) {
+                return MovieMapper.mapToMovie(movieQuery);
+            }
+            movieQuery.close();
+        }
+        return null;
     }
 }
