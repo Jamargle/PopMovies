@@ -80,7 +80,7 @@ public class MovieMapper {
         return movieList;
     }
 
-    private static Movie mapToMovie(Cursor movieCursor) {
+    public static Movie mapToMovie(Cursor movieCursor) {
         if (movieCursor != null) {
             return new Movie.Builder()
                     .movieDbId(movieCursor.getLong(movieCursor.getColumnIndex(MovieEntry._ID)))
