@@ -82,6 +82,10 @@ public class Movie {
         return favorite;
     }
 
+    public void setFavorite(int favoriteValue) {
+        favorite = favoriteValue;
+    }
+
     public static class Builder {
         private long movieDbId;
         private int movieApiId;
