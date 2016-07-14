@@ -7,9 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,12 +19,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.BuildConfig;
 import com.josecognizant.popmovies.R;
+import com.josecognizant.popmovies.app.ui.details.adapter.VideosAdapter;
+import com.josecognizant.popmovies.app.util.ServiceGenerator;
 import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
+import com.josecognizant.popmovies.data.network.MovieDbClient;
 import com.josecognizant.popmovies.domain.model.MovieVideos;
 import com.josecognizant.popmovies.domain.model.Video;
-import com.josecognizant.popmovies.data.network.MovieDbClient;
-import com.josecognizant.popmovies.app.util.ServiceGenerator;
-import com.josecognizant.popmovies.app.ui.details.adapter.VideosAdapter;
+import com.josecognizant.popmovies.presentation.details.DetailView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +42,7 @@ import retrofit2.Response;
  * Created by Jose on 26/05/2016.
  */
 public class MovieDetailsFragment extends Fragment
-        implements VideosAdapter.OnRecyclerViewClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        implements DetailView, VideosAdapter.OnRecyclerViewClickListener {
 
     public static final String DETAIL_URI = "URI";
     private static final int DETAIL_LOADER = 0;
@@ -65,17 +62,16 @@ public class MovieDetailsFragment extends Fragment
     RecyclerView mVideoRecyclerView;
     @BindView(R.id.mark_as_favorite_button)
     Button mFavoriteButton;
-
-    @OnClick(R.id.mark_as_favorite_button)
-    void changeFavoriteState() {
-        mFavoriteState = (mFavoriteState == 1) ? 0 : 1;
-    }
-
     private List<Video> mVideoList;
     private VideosAdapter mVideosAdapter;
     private Uri mUri;
     private String mTitle, mOrderType;
     private int mFavoriteState = -1, mApiMovieId;
+
+    @OnClick(R.id.mark_as_favorite_button)
+    void changeFavoriteState() {
+        mFavoriteState = (mFavoriteState == 1) ? 0 : 1;
+    }
 
     @Nullable
     @Override
@@ -102,12 +98,6 @@ public class MovieDetailsFragment extends Fragment
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(DETAIL_LOADER, null, this);
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         storeCurrentMovieState();
@@ -120,74 +110,46 @@ public class MovieDetailsFragment extends Fragment
         }
     }
 
-    private void setTitle(String title) {
+    @Override
+    public void setTitle(String title) {
         mTitleView.setText(title);
     }
 
-    private void setOverview(String overview) {
+    @Override
+    public void setOverView(String overview) {
         mOverView.setText(overview);
     }
 
-    private void setReleaseYear(String releaseDate) {
+    @Override
+    public void setReleaseYear(String releaseDate) {
         mReleaseYear.setText(releaseDate.substring(0, 4));
     }
 
-    private void setVoteAverage(String voteAverage) {
+    @Override
+    public void setVoteAverage(float voteAverage) {
         mVoteAverage.setText(String.valueOf(voteAverage));
     }
 
-    private void setMovieImage(String movieImagePath) {
+    @Override
+    public void setMovieImage(String posterPath) {
         Glide.with(getActivity())
-                .load(movieImagePath)
+                .load(posterPath)
                 .into(mPoster);
     }
 
-    private void setFavoriteState(int value) {
-        mFavoriteState = value;
-    }
-
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (mUri != null) {
-            // Now create and return a CursorLoader that will take care of
-            // creating a Cursor for the data being displayed.
-            return new CursorLoader(
-                    getActivity(),
-                    mUri,
-                    null,
-                    null,
-                    null,
-                    null
-            );
-        }
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data == null || !data.moveToFirst()) {
-            return;
-        }
-        setUIValues(data);
-        mTitle = data.getString(data.getColumnIndex(MovieEntry.COLUMN_TITLE));
-        mOrderType = data.getString(data.getColumnIndex(MovieEntry.COLUMN_ORDER_TYPE));
-        mApiMovieId = data.getInt(data.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID));
-        getVideosForTheMovie();
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
+    public void setFavorite(int favorite) {
+        mFavoriteState = favorite;
     }
 
     private void setUIValues(Cursor data) {
         if (data != null && data.moveToFirst()) {
             setTitle(data.getString(data.getColumnIndex(MovieEntry.COLUMN_TITLE)));
-            setOverview(data.getString(data.getColumnIndex(MovieEntry.COLUMN_OVERVIEW)));
+//            setOverview(data.getString(data.getColumnIndex(MovieEntry.COLUMN_OVERVIEW)));
             setReleaseYear(data.getString(data.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE)));
-            setVoteAverage(data.getString(data.getColumnIndex(MovieEntry.COLUMN_VOTE_AVERAGE)));
-            setMovieImage(data.getString(data.getColumnIndex(MovieEntry.COLUMN_POSTER)));
-            setFavoriteState(data.getInt(data.getColumnIndex(MovieEntry.COLUMN_FAVORITE)));
+//            setVoteAverage(data.getString(data.getColumnIndex(MovieEntry.COLUMN_VOTE_AVERAGE)));
+//            setMovieImage(data.getString(data.getColumnIndex(MovieEntry.COLUMN_POSTER)));
+//            setFavoriteState(data.getInt(data.getColumnIndex(MovieEntry.COLUMN_FAVORITE)));
         }
     }
 
