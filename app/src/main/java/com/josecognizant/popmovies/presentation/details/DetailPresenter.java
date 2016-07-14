@@ -1,7 +1,10 @@
 package com.josecognizant.popmovies.presentation.details;
 
 /**
- * Created by Jose on 14/06/2016.
+ * Presenter for the Movie Deatails screen
+ * Created by Jose on 13/07/2016.
  */
-public class DetailPresenter {
+public interface DetailPresenter {
+
+    void loadMovie();
 }
