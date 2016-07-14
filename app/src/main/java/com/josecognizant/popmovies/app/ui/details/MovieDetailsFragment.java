@@ -1,6 +1,5 @@
 package com.josecognizant.popmovies.app.ui.details;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,7 +21,6 @@ import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
 import com.josecognizant.popmovies.app.ui.details.adapter.VideosAdapter;
 import com.josecognizant.popmovies.app.util.MovieUtilities;
 import com.josecognizant.popmovies.app.util.ServiceGenerator;
-import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
 import com.josecognizant.popmovies.data.network.MovieDbClient;
 import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.domain.model.MovieVideos;
@@ -97,7 +95,7 @@ public class MovieDetailsFragment extends Fragment
     @Override
     public void onPause() {
         super.onPause();
-        storeCurrentMovieState();
+        mPresenter.saveMovieCurrentState();
     }
 
     @Override
@@ -155,16 +153,6 @@ public class MovieDetailsFragment extends Fragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mVideoRecyclerView.setLayoutManager(layoutManager);
         mVideoRecyclerView.setAdapter(mVideosAdapter);
-    }
-
-    private void storeCurrentMovieState() {
-        ContentValues currentFavoriteState = new ContentValues();
-        currentFavoriteState.put(MovieEntry.COLUMN_FAVORITE, mFavoriteState);
-        getActivity().getContentResolver().update(
-                MovieEntry.CONTENT_URI,
-                currentFavoriteState,
-                MovieEntry.COLUMN_TITLE + " = ? AND " + MovieEntry.COLUMN_ORDER_TYPE + " = ?",
-                new String[]{mTitle, mOrderType});
     }
 
     private void getVideosForTheMovie() {
