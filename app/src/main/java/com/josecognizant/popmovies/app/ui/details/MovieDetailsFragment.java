@@ -64,7 +64,6 @@ public class MovieDetailsFragment extends Fragment
     Button mFavoriteButton;
 
     private Movie mMovie;
-    private String mTitle, mOrderType;
     private int mFavoriteState = -1;
     private List<Video> mVideoList;
 
@@ -128,6 +127,11 @@ public class MovieDetailsFragment extends Fragment
     @Override
     public void setFavorite(int favorite) {
         mFavoriteState = favorite;
+    }
+
+    @Override
+    public int getFavoriteValue() {
+        return mFavoriteState;
     }
 
     @OnClick(R.id.mark_as_favorite_button)
