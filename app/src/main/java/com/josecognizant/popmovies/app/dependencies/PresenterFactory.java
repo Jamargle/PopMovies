@@ -2,8 +2,12 @@ package com.josecognizant.popmovies.app.dependencies;
 
 import android.content.Context;
 
+import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.presentation.InteractorExecutor;
 import com.josecognizant.popmovies.presentation.InteractorExecutorImp;
+import com.josecognizant.popmovies.presentation.details.DetailPresenter;
+import com.josecognizant.popmovies.presentation.details.DetailPresenterImp;
+import com.josecognizant.popmovies.presentation.details.DetailView;
 import com.josecognizant.popmovies.presentation.movies.MoviesPresenter;
 import com.josecognizant.popmovies.presentation.movies.MoviesPresenterImp;
 import com.josecognizant.popmovies.presentation.movies.MoviesView;
@@ -19,6 +23,10 @@ public class PresenterFactory {
         return new MoviesPresenterImp(view,
                 InteractorFactory.makeLoadMoviesInteractor(context),
                 makeInteractorExecutor());
+    }
+
+    public static DetailPresenter makeDetailPresenter(DetailView view, Movie movie) {
+        return new DetailPresenterImp(view, movie);
     }
 
     private static InteractorExecutor makeInteractorExecutor() {
