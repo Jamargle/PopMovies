@@ -2,7 +2,6 @@ package com.josecognizant.popmovies.app.ui.details;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -45,7 +44,6 @@ public class MovieDetailsFragment extends Fragment
         implements DetailView, VideosAdapter.OnRecyclerViewClickListener {
 
     public static final String DETAIL_URI = "URI";
-    private static final int DETAIL_LOADER = 0;
     private static final String VIDEO_SITE_YOUTUBE = "YouTube";
 
     @BindView(R.id.original_movie_title)
@@ -68,11 +66,6 @@ public class MovieDetailsFragment extends Fragment
     private String mTitle, mOrderType;
     private int mFavoriteState = -1, mApiMovieId;
 
-    @OnClick(R.id.mark_as_favorite_button)
-    void changeFavoriteState() {
-        mFavoriteState = (mFavoriteState == 1) ? 0 : 1;
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -85,16 +78,11 @@ public class MovieDetailsFragment extends Fragment
         return rootView;
     }
 
-    private void initVideosAdapter() {
-        mVideoList = new ArrayList<>();
-        mVideosAdapter = new VideosAdapter(mVideoList, this);
-    }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-    private void initRecyclerView() {
-        mVideoRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mVideoRecyclerView.setLayoutManager(layoutManager);
-        mVideoRecyclerView.setAdapter(mVideosAdapter);
+        getVideosForTheMovie();
     }
 
     @Override
@@ -142,15 +130,21 @@ public class MovieDetailsFragment extends Fragment
         mFavoriteState = favorite;
     }
 
-    private void setUIValues(Cursor data) {
-        if (data != null && data.moveToFirst()) {
-            setTitle(data.getString(data.getColumnIndex(MovieEntry.COLUMN_TITLE)));
-//            setOverview(data.getString(data.getColumnIndex(MovieEntry.COLUMN_OVERVIEW)));
-            setReleaseYear(data.getString(data.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE)));
-//            setVoteAverage(data.getString(data.getColumnIndex(MovieEntry.COLUMN_VOTE_AVERAGE)));
-//            setMovieImage(data.getString(data.getColumnIndex(MovieEntry.COLUMN_POSTER)));
-//            setFavoriteState(data.getInt(data.getColumnIndex(MovieEntry.COLUMN_FAVORITE)));
-        }
+    @OnClick(R.id.mark_as_favorite_button)
+    void changeFavoriteState() {
+        mFavoriteState = (mFavoriteState == 1) ? 0 : 1;
+    }
+
+    private void initVideosAdapter() {
+        mVideoList = new ArrayList<>();
+        mVideosAdapter = new VideosAdapter(mVideoList, this);
+    }
+
+    private void initRecyclerView() {
+        mVideoRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mVideoRecyclerView.setLayoutManager(layoutManager);
+        mVideoRecyclerView.setAdapter(mVideosAdapter);
     }
 
     private void storeCurrentMovieState() {
