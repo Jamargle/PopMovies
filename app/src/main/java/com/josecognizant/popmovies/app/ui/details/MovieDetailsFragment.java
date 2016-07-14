@@ -18,12 +18,16 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.BuildConfig;
 import com.josecognizant.popmovies.R;
+import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
 import com.josecognizant.popmovies.app.ui.details.adapter.VideosAdapter;
+import com.josecognizant.popmovies.app.util.MovieUtilities;
 import com.josecognizant.popmovies.app.util.ServiceGenerator;
 import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
 import com.josecognizant.popmovies.data.network.MovieDbClient;
+import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.domain.model.MovieVideos;
 import com.josecognizant.popmovies.domain.model.Video;
+import com.josecognizant.popmovies.presentation.details.DetailPresenter;
 import com.josecognizant.popmovies.presentation.details.DetailView;
 
 import java.util.ArrayList;
@@ -60,17 +64,20 @@ public class MovieDetailsFragment extends Fragment
     RecyclerView mVideoRecyclerView;
     @BindView(R.id.mark_as_favorite_button)
     Button mFavoriteButton;
-    private List<Video> mVideoList;
-    private VideosAdapter mVideosAdapter;
-    private Uri mUri;
+
+    private Movie mMovie;
     private String mTitle, mOrderType;
-    private int mFavoriteState = -1, mApiMovieId;
+    private int mFavoriteState = -1;
+    private List<Video> mVideoList;
+
+    private VideosAdapter mVideosAdapter;
+    private DetailPresenter mPresenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        getUriFromArguments();
+
         View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
         ButterKnife.bind(this, rootView);
         initVideosAdapter();
@@ -81,7 +88,9 @@ public class MovieDetailsFragment extends Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        setMovieFromArguments();
+        mPresenter = PresenterFactory.makeDetailPresenter(this, mMovie);
+        mPresenter.loadMovie();
         getVideosForTheMovie();
     }
 
@@ -89,13 +98,6 @@ public class MovieDetailsFragment extends Fragment
     public void onPause() {
         super.onPause();
         storeCurrentMovieState();
-    }
-
-    private void getUriFromArguments() {
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            mUri = arguments.getParcelable(DETAIL_URI);
-        }
     }
 
     @Override
@@ -135,6 +137,14 @@ public class MovieDetailsFragment extends Fragment
         mFavoriteState = (mFavoriteState == 1) ? 0 : 1;
     }
 
+    private void setMovieFromArguments() {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            Uri uri = arguments.getParcelable(DETAIL_URI);
+            mMovie = MovieUtilities.getMovieFromUri(getActivity().getContentResolver(), uri);
+        }
+    }
+
     private void initVideosAdapter() {
         mVideoList = new ArrayList<>();
         mVideosAdapter = new VideosAdapter(mVideoList, this);
@@ -159,7 +169,7 @@ public class MovieDetailsFragment extends Fragment
 
     private void getVideosForTheMovie() {
         MovieDbClient client = ServiceGenerator.createService(MovieDbClient.class);
-        Call<MovieVideos> call = client.getListOfVideos(mApiMovieId, BuildConfig.MOVIES_API_KEY);
+        Call<MovieVideos> call = client.getListOfVideos(mMovie.getMovieApiId(), BuildConfig.MOVIES_API_KEY);
 
         call.enqueue(new Callback<MovieVideos>() {
             @Override
