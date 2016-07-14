@@ -16,4 +16,6 @@ public interface DetailView {
     void setMovieImage(String posterPath);
 
     void setFavorite(int favorite);
+
+    int getFavoriteValue();
 }
