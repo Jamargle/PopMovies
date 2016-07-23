@@ -1,8 +1,20 @@
 package com.josecognizant.popmovies.presentation.details;
 
+import com.josecognizant.popmovies.BuildConfig;
+import com.josecognizant.popmovies.app.util.ServiceGenerator;
+import com.josecognizant.popmovies.data.network.MovieDbClient;
 import com.josecognizant.popmovies.domain.interactor.UpdateMovieInteractor;
 import com.josecognizant.popmovies.domain.model.Movie;
+import com.josecognizant.popmovies.domain.model.MovieVideos;
+import com.josecognizant.popmovies.domain.model.Video;
 import com.josecognizant.popmovies.presentation.InteractorExecutor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Presenter for the Movie Details screen
@@ -27,6 +39,7 @@ public class DetailPresenterImp implements DetailPresenter {
 
     @Override
     public void loadMovie() {
+        getVideosForTheMovie();
         view.setTitle(movie.getOriginalTitle());
         view.setOverView(movie.getOverview());
         view.setReleaseYear(movie.getReleaseDate());
@@ -40,6 +53,28 @@ public class DetailPresenterImp implements DetailPresenter {
         updateMovieValues();
         updateMovieInteractor.setMovieToUpdate(movie);
         interactorExecutor.execute(updateMovieInteractor);
+    }
+
+    private void getVideosForTheMovie() {
+        MovieDbClient client = ServiceGenerator.createService(MovieDbClient.class);
+        Call<MovieVideos> call = client.getListOfVideos(movie.getMovieApiId(), BuildConfig.MOVIES_API_KEY);
+
+        call.enqueue(new Callback<MovieVideos>() {
+            @Override
+            public void onResponse(Call<MovieVideos> call, Response<MovieVideos> response) {
+                MovieVideos videos = response.body();
+                List<Video> videoList = videos.getResults();
+                if (videoList != null) {
+                    view.setVideosList(videoList);
+                } else {
+                    view.setVideosList(new ArrayList<Video>());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieVideos> call, Throwable t) {
+            }
+        });
     }
 
     private void updateMovieValues() {
