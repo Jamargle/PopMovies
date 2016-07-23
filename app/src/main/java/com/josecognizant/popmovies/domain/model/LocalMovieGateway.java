@@ -11,7 +11,13 @@ public interface LocalMovieGateway {
 
     void persist(List<Movie> moviesToPersist);
 
-    long update(Movie movieToUpdate);
+    /**
+     * Updates a movie in the local database
+     *
+     * @param movieToUpdate Movie to be updated
+     * @return Number of rows updated
+     */
+    int update(Movie movieToUpdate);
 
     void delete(Movie movieToDelete);
 }
