@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.R;
@@ -84,12 +85,6 @@ public class MovieDetailsFragment extends Fragment
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.saveMovieCurrentState();
-    }
-
-    @Override
     public void setTitle(String title) {
         mTitleView.setText(title);
     }
@@ -132,9 +127,30 @@ public class MovieDetailsFragment extends Fragment
         mVideosAdapter.changeDataSet(mVideoList);
     }
 
+    @Override
+    public void showMovieUpdatedMessage() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), R.string.movie_updated, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void showUpdateMovieError() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), R.string.error_updating_movie, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     @OnClick(R.id.mark_as_favorite_button)
     void changeFavoriteState() {
         mFavoriteState = (mFavoriteState == 1) ? 0 : 1;
+        mPresenter.saveMovieCurrentState();
     }
 
     private void setMovieFromArguments() {
