@@ -25,8 +25,10 @@ public class PresenterFactory {
                 makeInteractorExecutor());
     }
 
-    public static DetailPresenter makeDetailPresenter(DetailView view, Movie movie) {
-        return new DetailPresenterImp(view, movie);
+    public static DetailPresenter makeDetailPresenter(DetailView view, Movie movie, Context context) {
+        return new DetailPresenterImp(view, movie,
+                InteractorFactory.makeUpdateMoviesInteractor(context),
+                makeInteractorExecutor());
     }
 
     private static InteractorExecutor makeInteractorExecutor() {

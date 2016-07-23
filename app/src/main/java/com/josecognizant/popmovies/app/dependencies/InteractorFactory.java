@@ -3,6 +3,7 @@ package com.josecognizant.popmovies.app.dependencies;
 import android.content.Context;
 
 import com.josecognizant.popmovies.domain.interactor.LoadMoviesInteractor;
+import com.josecognizant.popmovies.domain.interactor.UpdateMovieInteractor;
 
 import static com.josecognizant.popmovies.app.dependencies.GatewayFactory.makeLocalGateway;
 import static com.josecognizant.popmovies.app.dependencies.GatewayFactory.makeNetworkGateway;
@@ -14,5 +15,9 @@ import static com.josecognizant.popmovies.app.dependencies.GatewayFactory.makeNe
 public class InteractorFactory {
     public static LoadMoviesInteractor makeLoadMoviesInteractor(Context context) {
         return new LoadMoviesInteractor(makeLocalGateway(context), makeNetworkGateway());
+    }
+
+    public static UpdateMovieInteractor makeUpdateMoviesInteractor(Context context) {
+        return new UpdateMovieInteractor(makeLocalGateway(context));
     }
 }
