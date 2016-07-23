@@ -24,4 +24,8 @@ public interface DetailView {
     int getFavoriteValue();
 
     void setVideosList(List<Video> videosList);
+
+    void showMovieUpdatedMessage();
+
+    void showUpdateMovieError();
 }

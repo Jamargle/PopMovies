@@ -20,7 +20,8 @@ import retrofit2.Response;
  * Presenter for the Movie Details screen
  * Created by Jose on 13/07/2016.
  */
-public class DetailPresenterImp implements DetailPresenter {
+public class DetailPresenterImp
+        implements DetailPresenter, UpdateMovieInteractor.UpdateMoviesInteractorOutput {
 
     private final UpdateMovieInteractor updateMovieInteractor;
     private final InteractorExecutor interactorExecutor;
@@ -52,6 +53,7 @@ public class DetailPresenterImp implements DetailPresenter {
     public void saveMovieCurrentState() {
         updateMovieValues();
         updateMovieInteractor.setMovieToUpdate(movie);
+        updateMovieInteractor.setOutput(this);
         interactorExecutor.execute(updateMovieInteractor);
     }
 
@@ -79,5 +81,15 @@ public class DetailPresenterImp implements DetailPresenter {
 
     private void updateMovieValues() {
         movie.setFavorite(view.getFavoriteValue());
+    }
+
+    @Override
+    public void onMovieUpdated(int numberOfUpdatedMovies) {
+        view.showMovieUpdatedMessage();
+    }
+
+    @Override
+    public void onUpdateMovieError() {
+        view.showUpdateMovieError();
     }
 }
