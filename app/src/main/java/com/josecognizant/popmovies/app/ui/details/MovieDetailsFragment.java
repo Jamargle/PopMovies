@@ -15,15 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.josecognizant.popmovies.BuildConfig;
 import com.josecognizant.popmovies.R;
 import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
 import com.josecognizant.popmovies.app.ui.details.adapter.VideosAdapter;
 import com.josecognizant.popmovies.app.util.MovieUtilities;
-import com.josecognizant.popmovies.app.util.ServiceGenerator;
-import com.josecognizant.popmovies.data.network.MovieDbClient;
 import com.josecognizant.popmovies.domain.model.Movie;
-import com.josecognizant.popmovies.domain.model.MovieVideos;
 import com.josecognizant.popmovies.domain.model.Video;
 import com.josecognizant.popmovies.presentation.details.DetailPresenter;
 import com.josecognizant.popmovies.presentation.details.DetailView;
@@ -34,9 +30,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Fragment for showing details of movies
@@ -86,9 +79,8 @@ public class MovieDetailsFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setMovieFromArguments();
-        mPresenter = PresenterFactory.makeDetailPresenter(this, mMovie);
+        mPresenter = PresenterFactory.makeDetailPresenter(this, mMovie, getActivity());
         mPresenter.loadMovie();
-        getVideosForTheMovie();
     }
 
     @Override
@@ -134,6 +126,12 @@ public class MovieDetailsFragment extends Fragment
         return mFavoriteState;
     }
 
+    @Override
+    public void setVideosList(List<Video> videosList) {
+        mVideoList = videosList;
+        mVideosAdapter.changeDataSet(mVideoList);
+    }
+
     @OnClick(R.id.mark_as_favorite_button)
     void changeFavoriteState() {
         mFavoriteState = (mFavoriteState == 1) ? 0 : 1;
@@ -157,29 +155,6 @@ public class MovieDetailsFragment extends Fragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mVideoRecyclerView.setLayoutManager(layoutManager);
         mVideoRecyclerView.setAdapter(mVideosAdapter);
-    }
-
-    private void getVideosForTheMovie() {
-        MovieDbClient client = ServiceGenerator.createService(MovieDbClient.class);
-        Call<MovieVideos> call = client.getListOfVideos(mMovie.getMovieApiId(), BuildConfig.MOVIES_API_KEY);
-
-        call.enqueue(new Callback<MovieVideos>() {
-            @Override
-            public void onResponse(Call<MovieVideos> call, Response<MovieVideos> response) {
-                MovieVideos videos = response.body();
-                List<Video> videoList = videos.getResults();
-                if (videoList != null) {
-                    mVideoList = videoList;
-                } else {
-                    mVideoList = new ArrayList<>();
-                }
-                mVideosAdapter.changeDataSet(mVideoList);
-            }
-
-            @Override
-            public void onFailure(Call<MovieVideos> call, Throwable t) {
-            }
-        });
     }
 
     @Override
