@@ -3,5 +3,5 @@
     android:id="@+id/image_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:scaleType="fitStart"
-    android:contentDescription="@string/movie_list_image" />
+    android:contentDescription="@string/movie_list_image"
+    android:scaleType="fitStart" />

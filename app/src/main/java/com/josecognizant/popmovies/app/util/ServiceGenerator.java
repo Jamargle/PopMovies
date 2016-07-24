@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.util;
+package com.josecognizant.popmovies.app.util;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

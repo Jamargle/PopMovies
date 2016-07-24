@@ -9,9 +9,15 @@ import java.util.List;
 public interface LocalMovieGateway {
     List<Movie> obtainMovies();
 
-    long persist(Movie movieToPersist);
+    void persist(List<Movie> moviesToPersist);
 
-    long update(List<Movie> moviesToUpdate);
+    /**
+     * Updates a movie in the local database
+     *
+     * @param movieToUpdate Movie to be updated
+     * @return Number of rows updated
+     */
+    int update(Movie movieToUpdate);
 
     void delete(Movie movieToDelete);
 }

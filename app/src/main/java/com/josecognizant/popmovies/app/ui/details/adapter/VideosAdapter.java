@@ -1,4 +1,4 @@
-package com.josecognizant.popmovies.util;
+package com.josecognizant.popmovies.app.ui.details.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.josecognizant.popmovies.R;
-import com.josecognizant.popmovies.model.Video;
+import com.josecognizant.popmovies.domain.model.Video;
 
 import java.util.List;
 

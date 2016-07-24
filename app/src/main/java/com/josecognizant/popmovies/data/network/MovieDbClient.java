@@ -1,7 +1,7 @@
 package com.josecognizant.popmovies.data.network;
 
 import com.josecognizant.popmovies.domain.model.MoviePage;
-import com.josecognizant.popmovies.model.MovieVideos;
+import com.josecognizant.popmovies.domain.model.MovieVideos;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

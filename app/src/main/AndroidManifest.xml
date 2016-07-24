@@ -2,16 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.josecognizant.popmovies">
 
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".app.PopMoviesApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.movie_grid.MainActivity"
+            android:name=".app.ui.movies.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,23 +23,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MovieDetailActivity"
-            android:parentActivityName=".ui.movie_grid.MainActivity"
+            android:name=".app.ui.details.MovieDetailActivity"
+            android:parentActivityName=".app.ui.movies.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.movie_grid.MainActivity" />
+                android:value=".app.ui.movies.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name=".app.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.movie_grid.MainActivity">
+            android:parentActivityName=".app.ui.movies.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.josecognizant.popmovies.ui.movie_grid.MainActivity" />
+                android:value=".app.ui.movies.MainActivity" />
         </activity>
 
-        <service android:name=".service.MoviesDownloadService" />
         <provider
             android:name=".data.local.MovieProvider"
             android:authorities="com.josecognizant.popmovies.app"

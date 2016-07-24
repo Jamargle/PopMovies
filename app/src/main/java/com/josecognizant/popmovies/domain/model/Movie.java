@@ -1,34 +1,35 @@
 package com.josecognizant.popmovies.domain.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Class representing the Movie entity
  * Created by Jose on 24/05/2016.
  */
-public class Movie implements Parcelable {
-    public static final Parcelable.Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
+public class Movie {
 
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
+    private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
+    private static final String IMAGE_MEDIUM_SIZE = "/w185";
+
+    private long movieDbId;
+
+    @SerializedName("id")
     private int movieApiId;
+    @SerializedName("original_title")
     private String originalTitle;
+    @SerializedName("overview")
     private String overview;
+    @SerializedName("poster_path")
     private String thumbnailPosterPath;
+    @SerializedName("vote_average")
     private float voteAverage;
+    @SerializedName("release_date")
     private String releaseDate;
     private String orderType;
     private int favorite;
 
     Movie(Builder builder) {
+        this.movieDbId = builder.movieDbId;
         this.movieApiId = builder.movieApiId;
         this.originalTitle = builder.originalTitle;
         this.overview = builder.overview;
@@ -39,15 +40,8 @@ public class Movie implements Parcelable {
         this.favorite = builder.favorite;
     }
 
-    protected Movie(Parcel in) {
-        movieApiId = in.readInt();
-        originalTitle = in.readString();
-        overview = in.readString();
-        thumbnailPosterPath = in.readString();
-        voteAverage = in.readFloat();
-        releaseDate = in.readString();
-        orderType = in.readString();
-        favorite = in.readInt();
+    public long getMovieDbId() {
+        return movieDbId;
     }
 
     public int getMovieApiId() {
@@ -88,30 +82,12 @@ public class Movie implements Parcelable {
         return favorite;
     }
 
-    public void setFavorite(int favorite) {
-        if (favorite == 0 || favorite == 1) {
-            this.favorite = favorite;
-        }
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(movieApiId);
-        dest.writeString(originalTitle);
-        dest.writeString(overview);
-        dest.writeString(thumbnailPosterPath);
-        dest.writeFloat(voteAverage);
-        dest.writeString(releaseDate);
-        dest.writeString(orderType);
-        dest.writeInt(favorite);
+    public void setFavorite(int favoriteValue) {
+        favorite = favoriteValue;
     }
 
     public static class Builder {
+        private long movieDbId;
         private int movieApiId;
         private String originalTitle;
         private String overview;
@@ -120,6 +96,11 @@ public class Movie implements Parcelable {
         private String releaseDate;
         private String orderType;
         private int favorite;
+
+        public Builder movieDbId(long movieDbId) {
+            this.movieDbId = movieDbId;
+            return this;
+        }
 
         public Builder movieApiId(int movieApiId) {
             this.movieApiId = movieApiId;
@@ -137,7 +118,11 @@ public class Movie implements Parcelable {
         }
 
         public Builder thumbnailPosterPath(String path) {
-            this.thumbnailPosterPath = path;
+            if (!path.contains(BASE_IMAGE_URL)) {
+                this.thumbnailPosterPath = BASE_IMAGE_URL + IMAGE_MEDIUM_SIZE + path;
+            } else {
+                this.thumbnailPosterPath = path;
+            }
             return this;
         }
 

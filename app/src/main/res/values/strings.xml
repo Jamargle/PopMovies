@@ -2,7 +2,9 @@
     <string name="app_name">PopMovies</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Movies list activity -->
     <string name="movie_list_image">This is a poster of a movie</string>
+    <string name="error_load_movie_list">Error during load of movies</string>
 
     <!-- Settings strings-->
     <string name="title_activity_settings">Settings</string>
@@ -21,5 +23,7 @@
     <string name="poster_content_description">Poster of the movie</string>
     <string name="play_view">Button to play the video</string>
     <string name="base_url_youtube" translatable="false">http://www.youtube.com/watch?v=%s1</string>
+    <string name="movie_updated">The movie has been updated</string>
+    <string name="error_updating_movie">Error while updating the movie</string>
 
 </resources>
