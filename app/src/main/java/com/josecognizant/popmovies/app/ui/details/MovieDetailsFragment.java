@@ -57,7 +57,6 @@ public class MovieDetailsFragment extends Fragment
     @BindView(R.id.mark_as_favorite_button)
     Button mFavoriteButton;
 
-    private Movie mMovie;
     private int mFavoriteState = -1;
     private List<Video> mVideoList;
 
@@ -79,8 +78,7 @@ public class MovieDetailsFragment extends Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setMovieFromArguments();
-        mPresenter = PresenterFactory.makeDetailPresenter(this, mMovie, getActivity());
+        mPresenter = PresenterFactory.makeDetailPresenter(this, getMovieFromArguments(), getActivity());
         mPresenter.loadMovie();
     }
 
@@ -153,12 +151,18 @@ public class MovieDetailsFragment extends Fragment
         mPresenter.saveMovieCurrentState();
     }
 
-    private void setMovieFromArguments() {
+    @Override
+    public void onClick(View view, int position) {
+        showThisVideo(mVideoList.get(position));
+    }
+
+    private Movie getMovieFromArguments() {
         Bundle arguments = getArguments();
         if (arguments != null) {
             Uri uri = arguments.getParcelable(DETAIL_URI);
-            mMovie = MovieUtilities.getMovieFromUri(getActivity().getContentResolver(), uri);
+            return MovieUtilities.getMovieFromUri(getActivity().getContentResolver(), uri);
         }
+        return null;
     }
 
     private void initVideosAdapter() {
@@ -171,11 +175,6 @@ public class MovieDetailsFragment extends Fragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mVideoRecyclerView.setLayoutManager(layoutManager);
         mVideoRecyclerView.setAdapter(mVideosAdapter);
-    }
-
-    @Override
-    public void onClick(View view, int position) {
-        showThisVideo(mVideoList.get(position));
     }
 
     private void showThisVideo(Video video) {
