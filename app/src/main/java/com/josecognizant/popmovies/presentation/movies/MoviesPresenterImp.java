@@ -6,6 +6,8 @@ import com.josecognizant.popmovies.presentation.InteractorExecutor;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * Presenter for the Movies screen
  * Created by Jose on 14/06/2016.
@@ -17,13 +19,18 @@ public class MoviesPresenterImp
     private final InteractorExecutor interactorExecutor;
     private MoviesView moviesView;
 
-    public MoviesPresenterImp(MoviesView view,
-                              LoadMoviesInteractor loadMoviesInteractor,
+
+    @Inject
+    public MoviesPresenterImp(LoadMoviesInteractor loadMoviesInteractor,
                               InteractorExecutor interactorExecutor) {
 
-        moviesView = view;
         this.loadMoviesInteractor = loadMoviesInteractor;
         this.interactorExecutor = interactorExecutor;
+    }
+
+    @Override
+    public void onAttach(MoviesView view) {
+        moviesView = view;
     }
 
     @Override
