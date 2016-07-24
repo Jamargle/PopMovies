@@ -4,8 +4,8 @@ import android.content.UriMatcher;
 import android.net.Uri;
 import android.test.AndroidTestCase;
 
-import com.josecognizant.popmovies.data.MovieContract;
-import com.josecognizant.popmovies.data.MovieProvider;
+import com.josecognizant.popmovies.data.local.MovieContract;
+import com.josecognizant.popmovies.data.local.MovieProvider;
 
 /**
  * Tests for the UriMather class

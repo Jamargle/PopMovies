@@ -3,8 +3,8 @@ package data;
 import android.net.Uri;
 import android.test.AndroidTestCase;
 
-import com.josecognizant.popmovies.data.MovieContract;
-import com.josecognizant.popmovies.data.MovieContract.MovieEntry;
+import com.josecognizant.popmovies.data.local.MovieContract;
+import com.josecognizant.popmovies.data.local.MovieContract.MovieEntry;
 
 /**
  * Tests for MovieContract class
