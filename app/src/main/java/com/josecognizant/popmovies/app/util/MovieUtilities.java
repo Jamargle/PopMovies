@@ -57,11 +57,20 @@ public abstract class MovieUtilities {
         List<Movie> moviesToShow = new ArrayList<>();
         final String movieOrderSetting = getMovieOrderSetting(context);
 
-        for (Movie movie : movies) {
-            if (movieOrderSetting.equals(movie.getOrderType())) {
-                moviesToShow.add(movie);
+        if (movieOrderSetting.equals(MovieContract.FAVORITE_MOVIES)) {
+            for (Movie movie : movies) {
+                if (movie.getFavorite() == 1) {
+                    moviesToShow.add(movie);
+                }
+            }
+        } else {
+            for (Movie movie : movies) {
+                if (movieOrderSetting.equals(movie.getOrderType())) {
+                    moviesToShow.add(movie);
+                }
             }
         }
+
         return moviesToShow;
     }
 
