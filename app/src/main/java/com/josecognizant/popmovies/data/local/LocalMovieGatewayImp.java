@@ -56,17 +56,17 @@ public class LocalMovieGatewayImp implements LocalMovieGateway {
     }
 
     @Override
-    public long update(Movie movieToUpdate) {
+    public int update(Movie movieToUpdate) {
         ContentValues movieCV = MovieMapper.mapToCV(movieToUpdate);
-        long movieId = movieIDInDB(movieCV);
-        if (movieId > 0) {
+
+        if (movieIDInDB(movieCV) > 0) {
             return contentResolver.update(
                     MovieEntry.CONTENT_URI,
                     movieCV,
                     MovieEntry.COLUMN_TITLE + "= ?",
                     new String[]{movieCV.getAsString(MovieEntry.COLUMN_TITLE)});
         }
-        return movieId;
+        return 0;
     }
 
     @Override

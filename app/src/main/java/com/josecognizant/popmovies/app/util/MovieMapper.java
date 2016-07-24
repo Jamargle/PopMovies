@@ -91,7 +91,7 @@ public class MovieMapper {
                     .voteAverage(movieCursor.getFloat(movieCursor.getColumnIndex(MovieEntry.COLUMN_VOTE_AVERAGE)))
                     .releaseDate(movieCursor.getString(movieCursor.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE)))
                     .orderType(movieCursor.getString(movieCursor.getColumnIndex(MovieEntry.COLUMN_ORDER_TYPE)))
-                    .favorite(movieCursor.getInt(movieCursor.getColumnIndex(MovieEntry.COLUMN_POSTER)))
+                    .favorite(movieCursor.getInt(movieCursor.getColumnIndex(MovieEntry.COLUMN_FAVORITE)))
                     .build();
         }
         return null;
