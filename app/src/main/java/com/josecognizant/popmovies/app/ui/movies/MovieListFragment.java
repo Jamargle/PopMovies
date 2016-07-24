@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.josecognizant.popmovies.R;
+import com.josecognizant.popmovies.app.PopMoviesApp;
 import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
 import com.josecognizant.popmovies.app.ui.movies.adapter.MovieListAdapter;
 import com.josecognizant.popmovies.app.util.MovieUtilities;
@@ -54,6 +55,7 @@ public class MovieListFragment extends Fragment
         initAdapter();
         initRecyclerView(rootView);
         mPresenter = PresenterFactory.makeMoviesPresenter(this, getActivity());
+        initializeInjector((PopMoviesApp) getActivity().getApplication());
         ButterKnife.bind(this, rootView);
         return rootView;
     }
@@ -141,6 +143,12 @@ public class MovieListFragment extends Fragment
     private void startMovieDetailsActivity(Movie movie) {
         ((Callback) getActivity()).onItemSelected(MovieContract.MovieEntry.buildMovieUri(
                 movie.getMovieDbId()));
+    }
+
+    private void initializeInjector(PopMoviesApp application) {
+        DaggerMovieListFragmentComponent.builder()
+                .applicationComponent(application.getApplicationComponent())
+                .build().inject(this);
     }
 
     interface Callback {

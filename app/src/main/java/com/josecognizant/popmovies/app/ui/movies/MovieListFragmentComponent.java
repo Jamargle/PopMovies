@@ -6,7 +6,7 @@ import com.josecognizant.popmovies.app.dependencies.scopes.FragmentScope;
 import dagger.Component;
 
 @FragmentScope
-@Component(dependencies = ApplicationComponent.class)
+@Component(dependencies = ApplicationComponent.class, modules = MovieListFragmentModule.class)
 public interface MovieListFragmentComponent {
     void inject(MovieListFragment fragment);
 }
