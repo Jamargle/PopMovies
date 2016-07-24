@@ -1,7 +1,9 @@
 package com.josecognizant.popmovies.app.dependencies;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+
+import com.josecognizant.popmovies.domain.interactor.LoadMoviesInteractor;
+import com.josecognizant.popmovies.presentation.InteractorExecutor;
 
 import javax.inject.Singleton;
 
@@ -16,5 +18,7 @@ import dagger.Component;
 public interface ApplicationComponent {
     Context context();
 
-    SharedPreferences sharedPreferences();
+    LoadMoviesInteractor loadMoviesInteractor();
+
+    InteractorExecutor interactorExecutor();
 }
