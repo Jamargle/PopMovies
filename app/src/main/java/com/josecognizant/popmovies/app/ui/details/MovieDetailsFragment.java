@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.R;
+import com.josecognizant.popmovies.app.PopMoviesApp;
 import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
 import com.josecognizant.popmovies.app.ui.details.adapter.VideosAdapter;
 import com.josecognizant.popmovies.app.util.MovieUtilities;
@@ -70,6 +71,7 @@ public class MovieDetailsFragment extends Fragment
 
         View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
         ButterKnife.bind(this, rootView);
+        initializeInjector((PopMoviesApp) getActivity().getApplication());
         initVideosAdapter();
         initRecyclerView();
         return rootView;
@@ -156,15 +158,6 @@ public class MovieDetailsFragment extends Fragment
         showThisVideo(mVideoList.get(position));
     }
 
-    private Movie getMovieFromArguments() {
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            Uri uri = arguments.getParcelable(DETAIL_URI);
-            return MovieUtilities.getMovieFromUri(getActivity().getContentResolver(), uri);
-        }
-        return null;
-    }
-
     private void initVideosAdapter() {
         mVideoList = new ArrayList<>();
         mVideosAdapter = new VideosAdapter(mVideoList, this);
@@ -186,5 +179,21 @@ public class MovieDetailsFragment extends Fragment
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             getActivity().startActivity(intent);
         }
+    }
+
+    private Movie getMovieFromArguments() {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            Uri uri = arguments.getParcelable(DETAIL_URI);
+            return MovieUtilities.getMovieFromUri(getActivity().getContentResolver(), uri);
+        }
+        return null;
+    }
+
+    private void initializeInjector(PopMoviesApp application) {
+        DaggerMovieDetailsFragmentComponent.builder()
+                .movieDetailsFragmentModule(new MovieDetailsFragmentModule(getMovieFromArguments()))
+                .applicationComponent(application.getApplicationComponent())
+                .build().inject(this);
     }
 }
