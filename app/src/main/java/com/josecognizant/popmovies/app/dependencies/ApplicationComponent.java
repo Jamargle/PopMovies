@@ -3,6 +3,7 @@ package com.josecognizant.popmovies.app.dependencies;
 import android.content.Context;
 
 import com.josecognizant.popmovies.domain.interactor.LoadMoviesInteractor;
+import com.josecognizant.popmovies.domain.interactor.UpdateMovieInteractor;
 import com.josecognizant.popmovies.presentation.InteractorExecutor;
 
 import javax.inject.Singleton;
@@ -19,6 +20,8 @@ public interface ApplicationComponent {
     Context context();
 
     LoadMoviesInteractor loadMoviesInteractor();
+
+    UpdateMovieInteractor updateMovieInteractor();
 
     InteractorExecutor interactorExecutor();
 }

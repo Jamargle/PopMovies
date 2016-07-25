@@ -8,6 +8,7 @@ import com.josecognizant.popmovies.data.local.LocalMovieGatewayImp;
 import com.josecognizant.popmovies.data.network.MovieDbClient;
 import com.josecognizant.popmovies.data.network.NetworkMovieGatewayImp;
 import com.josecognizant.popmovies.domain.interactor.LoadMoviesInteractor;
+import com.josecognizant.popmovies.domain.interactor.UpdateMovieInteractor;
 import com.josecognizant.popmovies.domain.model.LocalMovieGateway;
 import com.josecognizant.popmovies.domain.model.NetworkMovieGateway;
 import com.josecognizant.popmovies.presentation.InteractorExecutor;
@@ -61,5 +62,11 @@ public class ApplicationModule {
     @Singleton
     LoadMoviesInteractor provideLoadMoviesInteractor(LocalMovieGateway localGateway, NetworkMovieGateway networkGateway) {
         return new LoadMoviesInteractor(localGateway, networkGateway);
+    }
+
+    @Provides
+    @Singleton
+    UpdateMovieInteractor provideUpdateMovieInteractor(LocalMovieGateway localGateway) {
+        return new UpdateMovieInteractor(localGateway);
     }
 }
