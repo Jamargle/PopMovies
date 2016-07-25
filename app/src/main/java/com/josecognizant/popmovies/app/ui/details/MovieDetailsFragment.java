@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.R;
-import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
+import com.josecognizant.popmovies.app.PopMoviesApp;
 import com.josecognizant.popmovies.app.ui.details.adapter.VideosAdapter;
 import com.josecognizant.popmovies.app.util.MovieUtilities;
 import com.josecognizant.popmovies.domain.model.Movie;
@@ -27,6 +27,8 @@ import com.josecognizant.popmovies.presentation.details.DetailView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,11 +59,12 @@ public class MovieDetailsFragment extends Fragment
     @BindView(R.id.mark_as_favorite_button)
     Button mFavoriteButton;
 
+    @Inject
+    DetailPresenter mPresenter;
+
     private int mFavoriteState = -1;
     private List<Video> mVideoList;
-
     private VideosAdapter mVideosAdapter;
-    private DetailPresenter mPresenter;
 
     @Nullable
     @Override
@@ -70,16 +73,28 @@ public class MovieDetailsFragment extends Fragment
 
         View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
         ButterKnife.bind(this, rootView);
+        initializeInjector((PopMoviesApp) getActivity().getApplication());
         initVideosAdapter();
         initRecyclerView();
         return rootView;
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mPresenter.onAttach(this);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPresenter = PresenterFactory.makeDetailPresenter(this, getMovieFromArguments(), getActivity());
         mPresenter.loadMovie();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mPresenter.onDetach();
     }
 
     @Override
@@ -156,15 +171,6 @@ public class MovieDetailsFragment extends Fragment
         showThisVideo(mVideoList.get(position));
     }
 
-    private Movie getMovieFromArguments() {
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            Uri uri = arguments.getParcelable(DETAIL_URI);
-            return MovieUtilities.getMovieFromUri(getActivity().getContentResolver(), uri);
-        }
-        return null;
-    }
-
     private void initVideosAdapter() {
         mVideoList = new ArrayList<>();
         mVideosAdapter = new VideosAdapter(mVideoList, this);
@@ -186,5 +192,21 @@ public class MovieDetailsFragment extends Fragment
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             getActivity().startActivity(intent);
         }
+    }
+
+    private Movie getMovieFromArguments() {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            Uri uri = arguments.getParcelable(DETAIL_URI);
+            return MovieUtilities.getMovieFromUri(getActivity().getContentResolver(), uri);
+        }
+        return null;
+    }
+
+    private void initializeInjector(PopMoviesApp application) {
+        DaggerMovieDetailsFragmentComponent.builder()
+                .movieDetailsFragmentModule(new MovieDetailsFragmentModule(getMovieFromArguments()))
+                .applicationComponent(application.getApplicationComponent())
+                .build().inject(this);
     }
 }
