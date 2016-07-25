@@ -29,13 +29,18 @@ public class DetailPresenterImp
     private Movie movie;
     private DetailView view;
 
-    public DetailPresenterImp(DetailView view, Movie movie,
+    public DetailPresenterImp(Movie movie,
                               UpdateMovieInteractor updateMovieInteractor,
                               InteractorExecutor interactorExecutor) {
-        this.view = view;
+
         this.movie = movie;
         this.updateMovieInteractor = updateMovieInteractor;
         this.interactorExecutor = interactorExecutor;
+    }
+
+    @Override
+    public void onAttach(DetailView view) {
+        this.view = view;
     }
 
     @Override
@@ -55,6 +60,11 @@ public class DetailPresenterImp
         updateMovieInteractor.setMovieToUpdate(movie);
         updateMovieInteractor.setOutput(this);
         interactorExecutor.execute(updateMovieInteractor);
+    }
+
+    @Override
+    public void onDetach() {
+        view = null;
     }
 
     private void getVideosForTheMovie() {
