@@ -6,7 +6,11 @@ package com.josecognizant.popmovies.presentation.details;
  */
 public interface DetailPresenter {
 
+    void onAttach(DetailView view);
+
     void loadMovie();
 
     void saveMovieCurrentState();
+
+    void onDetach();
 }
