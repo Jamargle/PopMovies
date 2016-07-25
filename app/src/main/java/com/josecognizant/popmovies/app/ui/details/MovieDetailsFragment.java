@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.josecognizant.popmovies.R;
 import com.josecognizant.popmovies.app.PopMoviesApp;
-import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
 import com.josecognizant.popmovies.app.ui.details.adapter.VideosAdapter;
 import com.josecognizant.popmovies.app.util.MovieUtilities;
 import com.josecognizant.popmovies.domain.model.Movie;
@@ -28,6 +27,8 @@ import com.josecognizant.popmovies.presentation.details.DetailView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,11 +59,12 @@ public class MovieDetailsFragment extends Fragment
     @BindView(R.id.mark_as_favorite_button)
     Button mFavoriteButton;
 
+    @Inject
+    DetailPresenter mPresenter;
+
     private int mFavoriteState = -1;
     private List<Video> mVideoList;
-
     private VideosAdapter mVideosAdapter;
-    private DetailPresenter mPresenter;
 
     @Nullable
     @Override
@@ -78,10 +80,21 @@ public class MovieDetailsFragment extends Fragment
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mPresenter.onAttach(this);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPresenter = PresenterFactory.makeDetailPresenter(this, getMovieFromArguments(), getActivity());
         mPresenter.loadMovie();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mPresenter.onDetach();
     }
 
     @Override
