@@ -2,6 +2,7 @@ package com.josecognizant.popmovies.app.ui.movies;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.josecognizant.popmovies.R;
-import com.josecognizant.popmovies.app.dependencies.PresenterFactory;
+import com.josecognizant.popmovies.app.PopMoviesApp;
 import com.josecognizant.popmovies.app.ui.movies.adapter.MovieListAdapter;
 import com.josecognizant.popmovies.app.util.MovieUtilities;
 import com.josecognizant.popmovies.data.local.MovieContract;
@@ -22,6 +23,8 @@ import com.josecognizant.popmovies.presentation.movies.MoviesView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,8 +40,9 @@ public class MovieListFragment extends Fragment
     @BindView(R.id.empty_list)
     TextView mErrorsText;
 
+    @Inject
+    MoviesPresenter mPresenter;
     private MovieListAdapter mAdapter;
-    private MoviesPresenter mPresenter;
 
     private List<Movie> mMovieList;
 
@@ -53,9 +57,15 @@ public class MovieListFragment extends Fragment
         setHasOptionsMenu(true);
         initAdapter();
         initRecyclerView(rootView);
-        mPresenter = PresenterFactory.makeMoviesPresenter(this, getActivity());
+        initializeInjector((PopMoviesApp) getActivity().getApplication());
         ButterKnife.bind(this, rootView);
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mPresenter.onAttach(this);
     }
 
     @Override
@@ -141,6 +151,12 @@ public class MovieListFragment extends Fragment
     private void startMovieDetailsActivity(Movie movie) {
         ((Callback) getActivity()).onItemSelected(MovieContract.MovieEntry.buildMovieUri(
                 movie.getMovieDbId()));
+    }
+
+    private void initializeInjector(PopMoviesApp application) {
+        DaggerMovieListFragmentComponent.builder()
+                .applicationComponent(application.getApplicationComponent())
+                .build().inject(this);
     }
 
     interface Callback {
