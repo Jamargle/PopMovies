@@ -2,7 +2,6 @@ package com.josecognizant.popmovies.app.dependencies;
 
 import android.content.Context;
 
-import com.josecognizant.popmovies.domain.interactor.UpdateMovieInteractor;
 import com.josecognizant.popmovies.domain.model.LocalMovieGateway;
 import com.josecognizant.popmovies.domain.model.NetworkMovieGateway;
 import com.josecognizant.popmovies.presentation.InteractorExecutor;
@@ -23,8 +22,6 @@ public interface ApplicationComponent {
     NetworkMovieGateway networkMovieGateway();
 
     LocalMovieGateway localMovieGateway();
-
-    UpdateMovieInteractor updateMovieInteractor();
 
     InteractorExecutor interactorExecutor();
 }
