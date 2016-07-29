@@ -7,7 +7,6 @@ import com.josecognizant.popmovies.app.util.ServiceGenerator;
 import com.josecognizant.popmovies.data.local.LocalMovieGatewayImp;
 import com.josecognizant.popmovies.data.network.MovieDbClient;
 import com.josecognizant.popmovies.data.network.NetworkMovieGatewayImp;
-import com.josecognizant.popmovies.domain.interactor.LoadMoviesInteractor;
 import com.josecognizant.popmovies.domain.interactor.UpdateMovieInteractor;
 import com.josecognizant.popmovies.domain.model.LocalMovieGateway;
 import com.josecognizant.popmovies.domain.model.NetworkMovieGateway;
@@ -56,12 +55,6 @@ public class ApplicationModule {
     @Singleton
     NetworkMovieGateway provideNetworkMovieGateway() {
         return new NetworkMovieGatewayImp(ServiceGenerator.createService(MovieDbClient.class));
-    }
-
-    @Provides
-    @Singleton
-    LoadMoviesInteractor provideLoadMoviesInteractor(LocalMovieGateway localGateway, NetworkMovieGateway networkGateway) {
-        return new LoadMoviesInteractor(localGateway, networkGateway);
     }
 
     @Provides
