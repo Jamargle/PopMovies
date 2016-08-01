@@ -1,5 +1,6 @@
 package com.josecognizant.popmovies.domain.interactor;
 
+import com.josecognizant.popmovies.domain.exception.NetworkConnectionException;
 import com.josecognizant.popmovies.domain.model.LocalMovieGateway;
 import com.josecognizant.popmovies.domain.model.Movie;
 import com.josecognizant.popmovies.domain.model.NetworkMovieGateway;
@@ -30,13 +31,12 @@ public class LoadMoviesInteractor implements Interactor {
     public void run() {
         try {
             loadMovies();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NetworkConnectionException e) {
             output.onLoadMoviesError();
         }
     }
 
-    private void loadMovies() {
+    private void loadMovies() throws NetworkConnectionException {
         List<Movie> movieList;
         if (localGateway != null) {
             movieList = localGateway.obtainMovies();
