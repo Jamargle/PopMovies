@@ -1,5 +1,7 @@
 package com.josecognizant.popmovies.domain.model;
 
+import com.josecognizant.popmovies.domain.exception.NetworkConnectionException;
+
 import java.util.List;
 
 /**
@@ -7,5 +9,5 @@ import java.util.List;
  * Created by Jose on 24/05/2016.
  */
 public interface NetworkMovieGateway {
-    List<Movie> obtainMovies();
+    List<Movie> obtainMovies() throws NetworkConnectionException;
 }
